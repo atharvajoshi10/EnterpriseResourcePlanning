@@ -1,3 +1,8 @@
 # EnterpriseResourcePlanning
 
-To initialize the database use the init.sh / init.bat command.
+Requirements
+
+1) Nodejs
+2) Npm
+
+Start server using `nodemon server` command in the backend folder
