@@ -28,8 +28,14 @@ mongoose.connect(uri, {
     );
 const connection = mongoose.connection;
 connection.once('open', () => {
-    console.log("MongoBD connection established");
-})
+    console.log("MongoDB connection established");
+});
+
+//Importing the routes created for the server
+const processRouter = require('./routes/process');
+
+//Making sure app uses the routes
+app.use('/process',processRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{
