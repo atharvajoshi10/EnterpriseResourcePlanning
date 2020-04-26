@@ -33,9 +33,11 @@ connection.once('open', () => {
 
 //Importing the routes created for the server
 const processRouter = require('./routes/process');
+const itemsRouter = require('./routes/items');
 
 //Making sure app uses the routes
 app.use('/process',processRouter);
+app.use('/items',itemsRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{
