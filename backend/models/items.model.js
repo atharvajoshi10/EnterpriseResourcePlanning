@@ -1,6 +1,7 @@
 //Describes model for the items/components
 
 //Required import, Do not change
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 //Schema Definition
