@@ -1,5 +1,19 @@
 //Describes model for the items/components
 
+//item_name : Name of item eq angled bar
+//description : Optional explaination
+//drawing_number : identification for drawings
+//drawing_location : location of file in fs
+//process_list : list of processes
+//              process_id : Objid of process
+//              scheduled_date : Date when process is scheduled
+//              instructions: Any specific instructions to worker
+//attached_material : Any material required for the item
+//               material_id : Objid of material
+//               quantity : Quantity assigned 
+//username_created : Record user who created the process
+//username_updated : Record user who updated the process
+
 //Required import, Do not change
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
@@ -16,8 +30,20 @@ const itemSchema = new Schema({
         required: true
     },
     drawing_location: String,
-    process_list_overide: Boolean,
-    process_list:[String]
+    process_list: [{
+        process_id: {
+            type: String,
+            required: true
+        },
+        scheduled_date: Date,
+        instructions: String
+    }],
+    attached_materials: [{
+        material_id : String,
+        quantity : Number
+    }],
+    username_created : String,
+    username_updated: String
 },{
     timestamps:true,
 });
