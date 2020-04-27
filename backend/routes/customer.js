@@ -27,10 +27,10 @@ router.route('/addCustomer').post((req,res) => {
     const c_billing_address = req.body.c_billing_address;
     const c_past_orders = req.body.c_past_orders;
     const c_current_orders = req.body.c_current_orders;
-    const c_username_created = req.body.c_username_created;
-    const c_username_updated = req.body.c_username_updated;
+    const username_created = req.body.username_created;
+    const username_updated = req.body.username_updated;
     const newCustomer = new Customer({c_name,c_phone,c_address,c_representative,c_billing_address
-        ,c_past_orders,c_current_orders,c_username_created,c_username_updated});
+        ,c_past_orders,c_current_orders,username_created,username_updated});
     newCustomer.save()
     .then(() => res.json('Customer Added'))
     .catch(err => res.status(400).json('Unable to add Customer' + err));
@@ -39,7 +39,7 @@ router.route('/addCustomer').post((req,res) => {
 //Adding route to search by ID
 router.route('/:id').get((req,res) =>{
     Customer.findById(req.params.id)
-    .then(process => res.json(process))
+    .then(customer => res.json(customer))
     .catch(err => res.status(401).json('Invalid Id ' + err));
 });
 
@@ -54,8 +54,8 @@ router.route('/update/:id').post((req,res) =>{
         customer.c_billing_address = req.body.c_billing_address;
         customer.c_past_orders = req.body.c_past_orders;
         customer.c_current_orders = req.body.c_current_orders;
-        customer.c_username_created = req.body.c_username_created;
-        customer.c_username_updated = req.body.c_username_updated;
+        customer.username_created = req.body.username_created;
+        customer.username_updated = req.body.username_updated;
         customer.save()
         .then(() => res.json('Customer updated!'))
         .catch(err => res.status(400).json('Error: Unable to save updated Customer Details ' + err));
