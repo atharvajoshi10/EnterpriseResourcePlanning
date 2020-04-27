@@ -3,6 +3,8 @@
 //Describes process
 //process_name : Name of the process, eg boring, drilling ...
 //description : Explaination of the process
+//worker_name : Name of the worker performing the process
+//machine_id : objid of machine being used for the process
 //username_created : Record user who created the process
 //username_updated : Record user who updated the process
 //timestamps : record the timestamp of update and creations
@@ -17,6 +19,8 @@ const processSchema = new Schema({
         required: true
     },
     description: String,
+    worker_id: String,
+    machine_id: String,
     username_created : String,
     username_updated: String
 },{

@@ -43,4 +43,4 @@ const final_productSchema = new Schema({
 
 //Necesarry Export statement, Do not Change
 const Final_Product = mongoose.model('Item', final_productSchema);
-export default Final_Product;
+modules.export = Final_Product
