@@ -20,6 +20,7 @@ employeeSchema = new Schema({
     e_name : String,
     e_phone : String,
     e_address : String,
+    e_username : String,
     e_password : String,
     e_attendance : {
         date : Date,
