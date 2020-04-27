@@ -22,24 +22,37 @@ const Schema = mongoose.Schema;
 const itemSchema = new Schema({
     item_name:{
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
     description: String,
     drawing_number:{
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
-    drawing_location: String,
+    drawing_location: {
+        type:String,
+        trim:true
+    },
+    drawing_revision_number:{
+        type:Number,
+        default:0
+    },
     process_list: [{
         process_id: {
             type: String,
-            required: true
+            required: true,
+            trim:true
         },
         scheduled_date: Date,
         instructions: String
     }],
     attached_materials: [{
-        material_id : String,
+        material_id : {
+            type: String,
+            trim:true
+        },
         quantity : Number
     }],
     username_created : String,
@@ -52,4 +65,4 @@ const itemSchema = new Schema({
 //Necesarry Export statement, Do not Change
 const Item = mongoose.model('Item', itemSchema);
 
-export default Item;
+module.exports = Item;

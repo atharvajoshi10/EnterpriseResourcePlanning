@@ -37,4 +37,4 @@ const raw_materialSchema = Schema({
 //Necesarry Export statement, Do not Change
 const Raw_Material = mongoose.model('Process', raw_materialSchema);
 
-export default Raw_Material
+module.exports = Raw_Material
