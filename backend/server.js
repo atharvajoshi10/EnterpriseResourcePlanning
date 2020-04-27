@@ -34,10 +34,12 @@ connection.once('open', () => {
 //Importing the routes created for the server
 const processRouter = require('./routes/process');
 const itemsRouter = require('./routes/items');
+const customerRouter = require('./routes/customer')
 
 //Making sure app uses the routes
 app.use('/process',processRouter);
 app.use('/items',itemsRouter);
+app.use('/customer',customerRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{
