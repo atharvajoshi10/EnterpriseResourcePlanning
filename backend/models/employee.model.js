@@ -4,6 +4,7 @@
 //e_name : Name
 //e_phone : Phone Number
 //e_address : Current Address of the employee
+//e_password : Employee Password
 //e_attendance : Date, intime, out time
 //e_responsibilities : Description of responsibilies and machine being used to perform that
 //e_status : Currently working on which (product,process)
@@ -19,6 +20,7 @@ employeeSchema = new Schema({
     e_name : String,
     e_phone : String,
     e_address : String,
+    e_password : String,
     e_attendance : {
         date : Date,
         in_time : Date,
