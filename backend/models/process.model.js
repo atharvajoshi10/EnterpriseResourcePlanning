@@ -30,4 +30,4 @@ const processSchema = new Schema({
 //Necesarry Export statement, Do not Change
 const Process = mongoose.model('Process', processSchema);
 
-export default Process
+module.exports = Process
