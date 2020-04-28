@@ -2,6 +2,7 @@
 
 //Describes a machine
 //m_name : Name of the machine
+//m_image_location : location of machine image in file system
 //m_status : Working on which item
 //m_purchase_date : Date of purchase
 //m_maintainence : List of dates on which maintainence was performed
@@ -19,6 +20,9 @@ machineSchema = new Schema({
         type: String,
         trim:true,
     },
+
+    m_image_location : String,
+
     m_status: [String],
     m_operator : String,
     m_purchase_date : Date,

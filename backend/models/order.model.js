@@ -35,7 +35,8 @@ orderSchema = new Schema({
     },
     fp_list : [String],
     fp_cost : [{
-        bom_item: Number
+        bom_item: [String],
+        item_cost : [Number]
     }],
     item_list : [String],
     item_cost : [Number],
