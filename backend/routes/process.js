@@ -31,12 +31,6 @@ router.route('/:id').get((req,res) =>{
     .then(process => res.json(process))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
-//Adding a route to delete by ID
-router.route('/:id').delete((req,res) => {
-    Process.findByIdAndDelete(req.params.id)
-    .then(process => res.json(process))
-    .catch(err => res.status(404).json('Invalid Process Id/ Deletion failed ' + err));
-})
 
 //Adding a route to update by ID
 router.route('/update/:id').patch((req,res) =>{
@@ -46,12 +40,29 @@ router.route('/update/:id').patch((req,res) =>{
             if(!process){
                 res.status(404).json('Invalid Id!')
             }
-            res.json('Customer updated!')
+            res.json('Process updated!')
         })
     }
     catch(e){
-        res.status(400).json(e+err)
+        res.status(400).json('Something went wrong!'+err)
     }
 });
+
+//Adding a route to delete by ID
+router.route('/delete/:id').delete((req,res) => {
+    try{
+        Process.findByIdAndDelete(req.params.id)
+        .then(process =>{
+            if(!process){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Process Deleted!'+process)
+        })
+    }
+    catch(e){
+        res.status(500).json('Something went wrong!'+err)
+    }
+});
+
 //Export statement, Do not change
 module.exports = router;

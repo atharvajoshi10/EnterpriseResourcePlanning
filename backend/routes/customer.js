@@ -45,15 +45,25 @@ router.route('/update/:id').patch((req,res) =>{
         })
     }
     catch(e){
-        res.status(400).json(e+err)
+        res.status(400).json('Something went wrong!'+err)
     }
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
-    Customer.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Customer Deleted"))
-    .catch(err => res.status(404).json('Invalid Customer Id/ Deletion failed ' + err));
-})
+    try{
+        Customer.findByIdAndDelete(req.params.id)
+        .then(customer =>{
+            if(!customer){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Customer Deleted!')
+        })
+    }
+    catch(e){
+        res.status(500).json('Something went wrong!'+err)
+    }
+});
 
+//Necessary export statement, do not change
 module.exports = router;

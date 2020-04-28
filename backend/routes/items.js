@@ -30,13 +30,6 @@ router.route('/:id').get((req,res) =>{
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
-//Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
-    Item.findByIdAndDelete(req.params.id)
-    .then(item => res.json(item))
-    .catch(err => res.status(404).json('Invalid Item Id/ Deletion failed ' + err));
-});
-
 //Adding a route to update by ID
 router.route('/update/:id').patch((req,res) =>{
     try{
@@ -45,11 +38,27 @@ router.route('/update/:id').patch((req,res) =>{
             if(!item){
                 res.status(404).json('Invalid Id!')
             }
-            res.json('Customer updated!')
+            res.json('Item updated!')
         })
     }
     catch(e){
-        res.status(400).json(e+err)
+        res.status(400).json('Something went wrong!'+err)
+    }
+});
+
+//Adding a route to delete by ID
+router.route('/delete/:id').delete((req,res) => {
+    try{
+        Item.findByIdAndDelete(req.params.id)
+        .then(item =>{
+            if(!item){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Item Deleted!'+item)
+        })
+    }
+    catch(e){
+        res.status(500).json('Something went wrong!'+err)
     }
 });
 

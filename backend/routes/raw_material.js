@@ -30,13 +30,6 @@ router.route('/:id').get((req,res) =>{
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
-//Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
-    Raw_Material.findByIdAndDelete(req.params.id)
-    .then(raw_material => res.json(raw_material))
-    .catch(err => res.status(404).json('Invalid Material Id/ Deletion failed ' + err));
-});
-
 //Adding a route to update by ID
 router.route('/update/:id').patch((req,res) =>{
     try{
@@ -45,11 +38,27 @@ router.route('/update/:id').patch((req,res) =>{
             if(!raw_material){
                 res.status(404).json('Invalid Id!')
             }
-            res.json('Customer updated!')
+            res.json('Raw Material updated!')
         })
     }
     catch(e){
-        res.status(400).json(e+err)
+        res.status(400).json('Something went wrong!'+err)
+    }
+});
+
+//Adding a route to delete by ID
+router.route('/delete/:id').delete((req,res) => {
+    try{
+        Raw_Material.findByIdAndDelete(req.params.id)
+        .then(raw_material =>{
+            if(!raw_material){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Raw Material Deleted!'+raw_material)
+        })
+    }
+    catch(e){
+        res.status(500).json('Something went wrong!'+err)
     }
 });
 

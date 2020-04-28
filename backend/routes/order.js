@@ -40,20 +40,29 @@ router.route('/update/:id').patch((req,res) =>{
             if(!order){
                 res.status(404).json('Invalid Id!')
             }
-            res.json('Customer updated!')
+            res.json('Order updated!')
         })
     }
     catch(e){
-        res.status(400).json(e+err)
+        res.status(400).json('Something went wrong!'+err)
     }
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
-    Order.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Order Deleted"))
-    .catch(err => res.status(404).json('Order Id/ Deletion failed ' + err));
-})
+    try{
+        Order.findByIdAndDelete(req.params.id)
+        .then(order =>{
+            if(!order){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Order Deleted!'+order)
+        })
+    }
+    catch(e){
+        res.status(500).json('Something went wrong!'+err)
+    }
+});
 
 //Necessary export statement, do not change
 module.exports = router;
