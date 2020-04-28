@@ -67,7 +67,7 @@ router.route('/update/:id').post((req,res) =>{
         order.username_created = req.body.username_created;
         order.username_updated = req.body.username_updated;
         order.save()
-        .then(() => res.json('Final Product updated!'))
+        .then(() => res.json('Order updated!'))
         .catch(err => res.status(400).json('Error: Unable to save updated Order Details ' + err));
     })
     .catch(err => res.status(401).json('Invalid Id ' + err));
