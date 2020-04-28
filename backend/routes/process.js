@@ -9,23 +9,17 @@ let Process = require('../models/process.model');
 //eg for add process , variable `process_name` of the request
 //should contain the the process name, any other variable will
 //throw an error
-//Adding a route to view all products 
+//Adding a route to view all Processes
 router.route('/viewAll').get((req,res) => {
     Process.find()
     .then(process => res.json(process))
-    .catch(err => res.status(400).json('Error:' + err));
+    .catch(err => res.status(500).json('Error:' + err));
 });
 
 
-//Adding a route to add Processes
+//Adding a route to add a Process
 router.route('/addProcess').post((req,res) => {
-    const process_name = req.body.process_name;
-    const process_id = re.body.process_id;
-    const description = req.body.description;
-    const worker_id = req.body.worker_id;
-    const machine_id = req.body.machine_id;
-    const username_created = req.body.username_created;
-    const newProcess = new Process({process_name,process_id,description,worker_id,machine_id,username_created});
+    const newProcess = new Process(req.body)
     newProcess.save()
     .then(() => res.json('Process Added'))
     .catch(err => res.status(400).json('Unable to add Process' + err));
@@ -35,32 +29,29 @@ router.route('/addProcess').post((req,res) => {
 router.route('/:id').get((req,res) =>{
     Process.findById(req.params.id)
     .then(process => res.json(process))
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+    .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 //Adding a route to delete by ID
 router.route('/:id').delete((req,res) => {
     Process.findByIdAndDelete(req.params.id)
     .then(process => res.json(process))
-    .catch(err => res.status(400).json('Invalid Process Id/ Deletion failed ' + err));
+    .catch(err => res.status(404).json('Invalid Process Id/ Deletion failed ' + err));
 })
 
 //Adding a route to update by ID
-router.route('/update/:id').post((req,res) => {
-    Process.findById(req.params.id)
-    .then(process =>{
-        process.process_name = req.body.process_name;
-        process.process_id = re.body.process_id;
-        process.description = req.body.description;
-        process.worker_id = req.body.worker_id;
-        process.machine_id = req.body.machine_id;
-        process.username_created = req.body.username_created;
-        process.username_updated = req.body.username_updated;
-        process.save()
-        .then(() => res.json('Process updated!'))
-        .catch(err => res.status(400).json('Error: Unable to save updated Process ' + err));
-    })
-    .catch(err => res.status(400).json('Error : Invalid ID'));
+router.route('/update/:id').patch((req,res) =>{
+    try{
+        Process.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        .then(process => {
+            if(!process){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Customer updated!')
+        })
+    }
+    catch(e){
+        res.status(400).json(e+err)
+    }
 });
-
 //Export statement, Do not change
 module.exports = router;

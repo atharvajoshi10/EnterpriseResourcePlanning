@@ -15,22 +15,12 @@ let Employee = require('../models/employee.model');
 router.route('/viewAll').get((req,res) => {
     Employee.find()
     .then(employee => res.json(employee))
-    .catch(err => res.status(400).json('Error:' + err));
+    .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Employee
 router.route('/addEmployee').post((req,res) => {
-    const e_name = req.body.e_name;
-    const e_phone = req.body.e_phone;
-    const e_address = req.body.e_address;
-    const e_username = req.body.e_username;
-    const e_password = req.body.e_password;
-    const e_attendance = req.body.e_attendance;
-    const e_responsibilities = req.body.e_responsibilities;
-    const e_status = req.body.e_status;
-    const e_salary = Number(re.body.e_salary);
-    const username_created = req.body.username_created;
-    const newEmployee = new Employee({e_name,e_phone,e_address,e_username,e_password,e_attendance,e_responsibilities,e_status,e_salary,username_created});
+    const newEmployee = new Employee(req.body)
     newEmployee.save()
     .then(() => res.json('Employee Added'))
     .catch(err => res.status(400).json('Unable to add Employee' + err));
@@ -40,35 +30,32 @@ router.route('/addEmployee').post((req,res) => {
 router.route('/:id').get((req,res) =>{
     Employee.findById(req.params.id)
     .then(employee => res.json(employee))
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+    .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').post((req,res) =>{
-    Employee.findById(req.params.id)
-    .then(employee => {
-        employee.e_name = req.body.c_name;
-        employee.e_phone = req.body.c_phone;
-        employee.e_address = req.body.c_address;
-        employee.e_username = req.body.e_username;
-        employee.e_attendance = req.body.e_attendance;
-        employee.e_responsibilities = req.body.e_responsibilities;
-        employee.e_status = req.body.e_status;
-        employee.e_salary = Number(re.body.e_salary);
-        employee.username_created = req.body.username_created;
-        employee.username_updated = req.body.username_updated;
-        employee.save()
-        .then(() => res.json('Employee updated!'))
-        .catch(err => res.status(400).json('Error: Unable to save updated Employee Details ' + err));
-    })
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+router.route('/update/:id').patch((req,res) =>{
+    try{
+        Employee.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        .then(employee => {
+            if(!employee){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Employee updated!')
+        })
+    }
+    catch(e){
+        res.status(400).json(e+err)
+    }
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
     Employee.findByIdAndDelete(req.params.id)
     .then(() => res.json("Employee Deleted"))
-    .catch(err => res.status(400).json('Invalid Employee Id/ Deletion failed ' + err));
+    .catch(err => res.status(404).json('Invalid Employee Id/ Deletion failed ' + err));
 })
 
 module.exports = router;
+
+

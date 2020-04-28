@@ -14,19 +14,12 @@ let FinalProduct = require('../models/final_product.model');
 router.route('/viewAll').get((req,res) => {
     FinalProduct.find()
     .then(finalproduct => res.json(finalproduct))
-    .catch(err => res.status(400).json('Error:' + err));
+    .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Final Product
 router.route('/addFinalProduct').post((req,res) => {
-    const fp_name = req.body.fp_name;
-    const fp_id = req.body.fp_id;
-    const description = req.body.description;
-    const items = req.body.items;
-    const username_created = req.body.username_created;
-    const username_updated = req.body.username_updated;
-    const newFinalProduct = new FinalProduct({fp_name,fp_id,description,items
-        ,username_created,username_updated});
+    const newFinalProduct = new FinalProduct(req.body)
     newFinalProduct.save()
     .then(() => res.json('Final Product Added'))
     .catch(err => res.status(400).json('Unable to add Final Product ' + err));
@@ -36,31 +29,30 @@ router.route('/addFinalProduct').post((req,res) => {
 router.route('/:id').get((req,res) =>{
     FinalProduct.findById(req.params.id)
     .then(finalproduct => res.json(finalproduct))
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+    .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').post((req,res) =>{
-    FinalProduct.findById(req.params.id)
-    .then(finalproduct => {
-        finalproduct.fp_name = req.body.fp_name;
-        finalproduct.fp_id = req.body.fp_id;
-        finalproduct.description = req.body.description;
-        finalproduct.items = req.body.items;
-        finalproduct.username_created = req.body.username_created;
-        finalproduct.username_updated = req.body.username_updated;
-        finalproduct.save()
-        .then(() => res.json('Final Product updated!'))
-        .catch(err => res.status(400).json('Error: Unable to save updated Final Product Details ' + err));
-    })
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+router.route('/update/:id').patch((req,res) =>{
+    try{
+        FinalProduct.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        .then(finalproduct => {
+            if(!finalproduct){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Final Product updated!')
+        })
+    }
+    catch(e){
+        res.status(400).json(e+err)
+    }
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
     FinalProduct.findByIdAndDelete(req.params.id)
     .then(() => res.json("Final Product Deleted"))
-    .catch(err => res.status(400).json('Invalid Final Product Id/ Deletion failed ' + err));
+    .catch(err => res.status(404).json('Invalid Final Product Id/ Deletion failed ' + err));
 })
 
 //Necessary export statement, do not change

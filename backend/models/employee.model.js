@@ -16,6 +16,7 @@
 //Required import, Do not change
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const validator = require('validator')
 
 employeeSchema = new Schema({
     e_name : {
@@ -25,7 +26,7 @@ employeeSchema = new Schema({
     e_phone : {
         type: String,
         validate(value){
-            if(!isMobilePhone(value,'en-IN')){
+            if(!validator.isMobilePhone(value,"en-IN")){
                 throw new Error('Phone number is invalid')
             }
         }   

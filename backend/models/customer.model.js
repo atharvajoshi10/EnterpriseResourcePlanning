@@ -25,7 +25,7 @@ customerSchema = new Schema({
     c_phone : {
         type: String,
         validate(value){
-            if(!isMobilePhone(value,'en-IN')){
+            if(!validator.isMobilePhone(value,"en-IN")){
                 throw new Error('Phone number is invalid')
             }
         }   

@@ -8,25 +8,16 @@ let Item = require('../models/items.model');
 //eg for add process , variable `process_name` of the request
 //should contain the the process name, any other variable will
 //throw an error
-//Adding a route to view all items
+//Adding a route to view all Items
 router.route('/viewAll').get((req,res) => {
     Item.find()
     .then(item => res.json(item))
-    .catch(err => res.status(400).json('Error:' + err));
+    .catch(err => res.status(500).json('Error:' + err));
 });
 
-//Adding a route to add Processes
+//Adding a route to add an Item
 router.route('/addItems').post((req,res) => {
-    const item_name = req.body.item_name;
-    const item_id = req.body.item_id;
-    const description = req.body.description;
-    const drawing_number = req.body.drawing_number;
-    const drawing_location = req.body.drawing_location;
-    const drawing_revision_number = Number(req.body.drawing_revision_number);
-    const process_list = req.body.process_list;
-    const attached_materials = req.body.attached_materials;
-    const username_created = req.body.username_created;
-    const newItem = new Item({item_name,item_id,description,drawing_number,drawing_location,drawing_revision_number,process_list,attached_materials,username_created});
+    const newItem = new Item(req.body)
     newItem.save()
     .then(() => res.json('Item Added'))
     .catch(err => res.status(400).json('Unable to add Item' + err));
@@ -36,35 +27,30 @@ router.route('/addItems').post((req,res) => {
 router.route('/:id').get((req,res) =>{
     Item.findById(req.params.id)
     .then(item => res.json(item))
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+    .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
     Item.findByIdAndDelete(req.params.id)
     .then(item => res.json(item))
-    .catch(err => res.status(400).json('Invalid Item Id/ Deletion failed ' + err));
+    .catch(err => res.status(404).json('Invalid Item Id/ Deletion failed ' + err));
 });
 
 //Adding a route to update by ID
-router.route('/update/:id').post((req,res) => {
-    Item.findById(req.params.id)
-    .then(item =>{
-        item.item_name = req.body.item_name;
-        item.item_id = req.body.item_id;
-        item.description = req.body.description;
-        item.drawing_number = req.body.drawing_number;
-        item.drawing_location = req.body.drawing_location;
-        item.drawing_revision_number = Number(req.body.drawing_revision_number);
-        item.process_list = req.body.process_list;
-        item.attached_materials = req.body.attached_materials;
-        item.username_created = req.body.username_created;
-        item.username_updated = req.body.username_updated;
-        item.save()
-        .then(() => res.json('Item updated!'))
-        .catch(err => res.status(400).json('Error: Unable to save updated Item ' + err));
-    })
-    .catch(err => res.status(400).json('Error : Invalid ID'));
+router.route('/update/:id').patch((req,res) =>{
+    try{
+        Item.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        .then(item => {
+            if(!item){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Customer updated!')
+        })
+    }
+    catch(e){
+        res.status(400).json(e+err)
+    }
 });
 
 //Export statement, Do not change

@@ -15,22 +15,12 @@ let Customer = require('../models/customer.model');
 router.route('/viewAll').get((req,res) => {
     Customer.find()
     .then(customer => res.json(customer))
-    .catch(err => res.status(400).json('Error:' + err));
+    .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Customer
 router.route('/addCustomer').post((req,res) => {
-    const c_name = req.body.c_name;
-    const c_phone = req.body.c_phone;
-    const c_email = req.body.c_email;
-    const c_address = req.body.c_address;
-    const c_representative = req.body.c_representative;
-    const c_billing_address = req.body.c_billing_address;
-    const c_past_orders = req.body.c_past_orders;
-    const c_current_orders = req.body.c_current_orders;
-    const username_created = req.body.username_created;
-    const newCustomer = new Customer({c_name,c_phone,c_email,c_address,c_representative,c_billing_address
-        ,c_past_orders,c_current_orders,username_created,username_updated});
+    const newCustomer = new Customer(req.body)
     newCustomer.save()
     .then(() => res.json('Customer Added'))
     .catch(err => res.status(400).json('Unable to add Customer' + err));
@@ -40,35 +30,30 @@ router.route('/addCustomer').post((req,res) => {
 router.route('/:id').get((req,res) =>{
     Customer.findById(req.params.id)
     .then(customer => res.json(customer))
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+    .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').post((req,res) =>{
-    Customer.findById(req.params.id)
-    .then(customer => {
-        customer.c_name = req.body.c_name;
-        customer.c_phone = req.body.c_phone;
-        customer.c_email = req.body.c_email;
-        customer.c_address = req.body.c_address;
-        customer.c_representative = req.body.c_representative;
-        customer.c_billing_address = req.body.c_billing_address;
-        customer.c_past_orders = req.body.c_past_orders;
-        customer.c_current_orders = req.body.c_current_orders;
-        customer.username_created = req.body.username_created;
-        customer.username_updated = req.body.username_updated;
-        customer.save()
-        .then(() => res.json('Customer updated!'))
-        .catch(err => res.status(400).json('Error: Unable to save updated Customer Details ' + err));
-    })
-    .catch(err => res.status(401).json('Invalid Id ' + err));
+router.route('/update/:id').patch((req,res) =>{
+    try{
+        Customer.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        .then(customer => {
+            if(!customer){
+                res.status(404).json('Invalid Id!')
+            }
+            res.json('Customer updated!')
+        })
+    }
+    catch(e){
+        res.status(400).json(e+err)
+    }
 });
 
 //Adding a route to delete by ID
 router.route('/delete/:id').delete((req,res) => {
     Customer.findByIdAndDelete(req.params.id)
     .then(() => res.json("Customer Deleted"))
-    .catch(err => res.status(400).json('Invalid Customer Id/ Deletion failed ' + err));
+    .catch(err => res.status(404).json('Invalid Customer Id/ Deletion failed ' + err));
 })
 
 module.exports = router;
