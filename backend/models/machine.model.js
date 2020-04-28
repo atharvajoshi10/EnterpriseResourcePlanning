@@ -16,14 +16,22 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 machineSchema = new Schema({
-    m_name: String,
+    m_name: {
+        type: String,
+        trim:true,
+    },
+
     m_image_location : String,
+
     m_status: [String],
     m_operator : String,
     m_purchase_date : Date,
     m_maintainence : [Date],
     m_consumable : [{
-        m_consumable_id : String,
+        m_consumable_id : {
+            type: String,
+            trim:true,
+        },
         m_consumable_quantity : Number
     }],
     m_cost : Number,

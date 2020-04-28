@@ -15,10 +15,24 @@
 //Required import, Do not change
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const validator = require('validator')
 
 customerSchema = new Schema({
-    c_name : String,
+    c_name : {
+        type: String,
+        trim:true
+    },
     c_phone : Number,
+    c_email: {
+        type: String,
+        trim:true,
+        required: true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error('Email is invalid')
+            }
+        }
+    },
     c_address : String,
     c_representative : [String],
     c_billing_address : String,
