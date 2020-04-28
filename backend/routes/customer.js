@@ -29,8 +29,7 @@ router.route('/addCustomer').post((req,res) => {
     const c_past_orders = req.body.c_past_orders;
     const c_current_orders = req.body.c_current_orders;
     const username_created = req.body.username_created;
-    const username_updated = req.body.username_updated;
-    const newCustomer = new Customer({c_name,c_phone,c_address,c_representative,c_billing_address
+    const newCustomer = new Customer({c_name,c_phone,c_email,c_address,c_representative,c_billing_address
         ,c_past_orders,c_current_orders,username_created,username_updated});
     newCustomer.save()
     .then(() => res.json('Customer Added'))

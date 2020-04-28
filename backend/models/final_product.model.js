@@ -22,7 +22,10 @@ const final_productSchema = new Schema({
         trim:true,
         required: true
     },
-    fp_id : String,
+    fp_id :{
+        type: String,
+        trim:true
+    },
     description: String,
     items : [{
         item_id : {

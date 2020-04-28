@@ -24,7 +24,11 @@ employeeSchema = new Schema({
     },
     e_phone : {
         type: String,
-        trim:true,
+        validate(value){
+            if(!isMobilePhone(value,'en-IN')){
+                throw new Error('Phone number is invalid')
+            }
+        }   
     },
     e_address : String,
     e_username : {

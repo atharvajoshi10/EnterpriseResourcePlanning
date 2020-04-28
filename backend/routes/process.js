@@ -20,10 +20,12 @@ router.route('/viewAll').get((req,res) => {
 //Adding a route to add Processes
 router.route('/addProcess').post((req,res) => {
     const process_name = req.body.process_name;
+    const process_id = re.body.process_id;
     const description = req.body.description;
-    
-    const newProcess = new Process({process_name,description});
-
+    const worker_id = req.body.worker_id;
+    const machine_id = req.body.machine_id;
+    const username_created = req.body.username_created;
+    const newProcess = new Process({process_name,process_id,description,worker_id,machine_id,username_created});
     newProcess.save()
     .then(() => res.json('Process Added'))
     .catch(err => res.status(400).json('Unable to add Process' + err));
@@ -47,8 +49,12 @@ router.route('/update/:id').post((req,res) => {
     Process.findById(req.params.id)
     .then(process =>{
         process.process_name = req.body.process_name;
+        process.process_id = re.body.process_id;
         process.description = req.body.description;
-
+        process.worker_id = req.body.worker_id;
+        process.machine_id = req.body.machine_id;
+        process.username_created = req.body.username_created;
+        process.username_updated = req.body.username_updated;
         process.save()
         .then(() => res.json('Process updated!'))
         .catch(err => res.status(400).json('Error: Unable to save updated Process ' + err));

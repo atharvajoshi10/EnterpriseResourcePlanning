@@ -22,7 +22,14 @@ customerSchema = new Schema({
         type: String,
         trim:true
     },
-    c_phone : Number,
+    c_phone : {
+        type: String,
+        validate(value){
+            if(!isMobilePhone(value,'en-IN')){
+                throw new Error('Phone number is invalid')
+            }
+        }   
+    },
     c_email: {
         type: String,
         trim:true,

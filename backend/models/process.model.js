@@ -19,6 +19,10 @@ const processSchema = new Schema({
         trim: true,
         required: true
     },
+    process_id :{
+        type: String,
+        trim:true
+    },
     description: String,
     worker_id: {
         type: String,

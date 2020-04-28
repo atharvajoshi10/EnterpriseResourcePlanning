@@ -20,11 +20,15 @@ machineSchema = new Schema({
         type: String,
         trim:true,
     },
-
-    m_image_location : String,
-
+    m_image_location : {
+        type:String,
+        trim:true
+    },
     m_status: [String],
-    m_operator : String,
+    m_operator : {
+        type:String,
+        trim:true
+    },
     m_purchase_date : Date,
     m_maintainence : [Date],
     m_consumable : [{

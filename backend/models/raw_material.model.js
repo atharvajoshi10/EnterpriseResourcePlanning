@@ -19,6 +19,10 @@ const raw_materialSchema = Schema({
         type: String,
         required: true
     },
+    raw_material_id :{
+        type: String,
+        trim:true
+    },
     description: String,
     category :{
         type:String,

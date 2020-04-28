@@ -18,13 +18,14 @@ router.route('/viewAll').get((req,res) => {
 //Adding a route to add Materials
 router.route('/addMaterial').post((req,res) => {
     const raw_material_name = req.body.raw_material_name;
+    const raw_material_id = req.body.raw_material_id;
     const description = req.body.description;
     const category = req.body.category;
     const quantity = Number(req.body.quantity);
     const measurement = req.body.measurement;
     const unit = req.body.unit;
     const username_created = req.body.username_created;
-    const newRaw_Material = new Raw_Material({raw_material_name,description,category,quantity,measurement,unit,username_created});
+    const newRaw_Material = new Raw_Material({raw_material_name,raw_material_id,description,category,quantity,measurement,unit,username_created});
     newRaw_Material.save()
     .then(() => res.json('Material Added'))
     .catch(err => res.status(400).json('Unable to add Material' + err));
@@ -49,6 +50,7 @@ router.route('/update/:id').post((req,res) => {
     Raw_Material.findById(req.params.id)
     .then(raw_material =>{
         raw_material.raw_material_name = req.body.raw_material_name;
+        raw_material.raw_material_id = req.body.raw_material_id;
         raw_material.description = req.body.description;
         raw_material.category = req.body.category;
         raw_material.quantity = Number(req.body.quantity);

@@ -25,6 +25,10 @@ const itemSchema = new Schema({
         required: true,
         trim:true
     },
+    item_id :{
+        type: String,
+        trim:true
+    },
     description: String,
     drawing_number:{
         type: String,

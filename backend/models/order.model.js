@@ -25,12 +25,24 @@ orderSchema = new Schema({
         trim:true,
         required : true
     },
-    po_path: String,
-    so_number : String,
-    so_path: String,
+    po_path: {
+        type:String,
+        trim:true
+    },
+    so_number : {
+        type:String,
+        trim:true
+    },
+    so_path: {
+        type:String,
+        trim:true
+    },
     invoice_type : String,
     transporter : {
-        t_name: String,
+        t_name: {
+            type:String,
+            trim:true
+        },
         t_number : Number
     },
     fp_list : [String],
