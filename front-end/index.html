@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="resources/css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <header class="masthead">
+        <button class="nav-btn"></button>
+        <h1 class="title">Dashboard</h1>
+        <aside class="sidebar is-open">
+            <nav class="nav">
+                <ul>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Assembly Master</a></li>
+                    <li><a href="">Customer List</a></li>
+                    <li><a href="">Supplier Master</a></li>   
+                    <li><a href="">Employee Master</a></li>
+                    <li><a href="">Inventory</a></li>
+                    <li><a href="">Equipment Master</a></li>
+                    <li class="collapse-btn"><a class="collapse">collapse</a></li>
+                </ul>
+            </nav>
+        </aside>
+    </header>
+    <section class="page-content">
+        <section class="grid">
+          <article></article>
+          <article id="columnchart_material1"></article>
+          <article id="columnchart_material2"></article>
+        </section>
+    </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="resources/js/dashboard.js"></script>
+    <script src="resources/js/charts.js"></script>
+</body>
+</html>

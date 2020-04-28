@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/yeti/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-bWm7zrSUE5E+21rA9qdH5frkMpXvqjQm/WJw4L5PYQLNHrywI5zs5saEjIcCdGu1" crossorigin="anonymous">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Login</title>
+        <style>
+            *{
+                padding:0px;
+                margin:0px;
+                border:0px; 
+            }
+
+            body{
+                background-image: linear-gradient(to bottom,#008cba 0%,#004e92 50%,#000428 100%);
+                min-width: 768px;
+                user-select: none;
+                -moz-user-select: none;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            
+            .form-container{
+                position: relative;
+                width:100%;
+                height: calc(100vh - 69.5px);
+            }
+
+            form label{
+                color: #5a5a5a;
+                font-size: 25px;
+            }
+
+            form h1{
+                color: #5a5a5a;
+                font-size: 60px;
+                letter-spacing: 2px;
+            }
+
+            form{
+                position: absolute;
+                background:#fff;
+                width:28%;
+                padding:30px;
+                box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 525px;;
+            }
+
+            header .nav-link{
+                font-size: 20px !important;
+            }
+/* 
+            .logo{
+                height: 69.5px;
+                width: 70px;
+            } */
+            
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <!-- <img class="logo" src="../img/logo2.svg" alt="Ved Engineers Logo"> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.html">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Login<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="form-container">
+            <form>
+                <fieldset>
+                    <div class="form-group" style="text-align: center;">
+                        <h1>Login</h1>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label col-form-label-lg">Email address</label>
+                        <input type="email" class="form-control form-control-lg" autocomplete="off" id="email" placeholder="Enter email" required>
+                        <div class="valid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-form-label col-form-label-lg">Password</label>
+                        <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group" style="text-align: center; margin-top: 40px;">
+                        <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-lg" style="margin-right: 20px;">
+                        <input type="reset" name="reset" value="Reset" class="btn btn-primary btn-lg">
+                    </div>
+                    <div class="form-group" style="text-align: center;">
+                        <a href="signup.html">Create your Account</a>
+                    </div>
+                </fieldset>
+                
+            </form>
+        </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+<!-- Set input type to is-valid if validation is successfull
+Set input type to is-invalid for validation  is unsuccessfull -->
