@@ -22,6 +22,7 @@ orderSchema = new Schema({
     customer_id: String,
     po_number :{
         type : String,
+        trim:true,
         required : true
     },
     po_path: String,
@@ -34,11 +35,15 @@ orderSchema = new Schema({
     },
     fp_list : [String],
     fp_cost : [{
-        bom_item: Number
+        bom_item: [String],
+        item_cost : [Number]
     }],
     item_list : [String],
     item_cost : [Number],
-    tax_mapping : ['CGST','IGST','SGST'],
+    tax_mapping :{
+        type: String,
+        enum:['CGST','IGST','SGST']
+    },
     username_created : String,
     username_updated: String
 },{

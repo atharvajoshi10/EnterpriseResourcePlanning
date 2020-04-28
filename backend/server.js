@@ -35,11 +35,19 @@ connection.once('open', () => {
 const processRouter = require('./routes/process');
 const itemsRouter = require('./routes/items');
 const customerRouter = require('./routes/customer')
+const raw_materialRouter = require('./routes/raw_material')
+const finalproductRouter = require('./routes/final_product')
+const orderRouter = require('./routes/order')
+const machineRouter = require('./routes/machine')
 
 //Making sure app uses the routes
 app.use('/process',processRouter);
 app.use('/items',itemsRouter);
 app.use('/customer',customerRouter);
+app.use('/raw_material',raw_materialRouter);
+app.use('/finalproduct',finalproductRouter);
+app.use('/order',orderRouter);
+app.use('/machine',machineRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{

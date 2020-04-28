@@ -18,11 +18,24 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 employeeSchema = new Schema({
-    e_name : String,
-    e_phone : String,
+    e_name : {
+        type: String,
+        trim:true,
+    },
+    e_phone : {
+        type: String,
+        trim:true,
+    },
     e_address : String,
-    e_username : String,
-    e_password : String,
+    e_username : {
+        type: String,
+        trim:true,
+    },
+    e_password : {
+        type: String,
+        trim:true,
+        select:false
+    },
     e_attendance : {
         date : Date,
         in_time : Date,

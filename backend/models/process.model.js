@@ -16,11 +16,18 @@ const Schema = mongoose.Schema;
 const processSchema = new Schema({
     process_name: {
         type: String,
+        trim: true,
         required: true
     },
     description: String,
-    worker_id: String,
-    machine_id: String,
+    worker_id: {
+        type: String,
+        trim:true,
+    },
+    machine_id: {
+        type: String,
+        trim:true,
+    },
     username_created : String,
     username_updated: String
 },{

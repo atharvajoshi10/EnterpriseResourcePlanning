@@ -19,12 +19,15 @@ const Schema = mongoose.Schema;
 const final_productSchema = new Schema({
     fp_name : {
         type: String,
+        trim:true,
         required: true
     },
+    fp_id : String,
     description: String,
     items : [{
         item_id : {
             type: String,
+            trim:true,
             required: true
         },
         process_list_overide: {
@@ -41,6 +44,5 @@ const final_productSchema = new Schema({
 })
 
 
-//Necesarry Export statement, Do not Change
-const Final_Product = mongoose.model('Item', final_productSchema);
-modules.export = Final_Product
+const FinalProduct = mongoose.model('FinalProduct', final_productSchema);
+module.exports = FinalProduct

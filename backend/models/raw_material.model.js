@@ -21,12 +21,16 @@ const raw_materialSchema = Schema({
     },
     description: String,
     category :{
-        type : ['Raw', 'Consumable'],
+        type:String,
+        enum:['Raw', 'Consumable'],
         required : true
     },
     quantity: Number,
     measurement : String,
-    unit :['Weight','Metrics','Volume','Quantity'],
+    unit :{
+        type:String,
+        enum:['Weight','Metrics','Volume','Quantity']
+    },
     username_created : String,
     username_updated: String
 },{
@@ -35,6 +39,6 @@ const raw_materialSchema = Schema({
 
 
 //Necesarry Export statement, Do not Change
-const Raw_Material = mongoose.model('Process', raw_materialSchema);
+const Raw_Material = mongoose.model('Raw_Material', raw_materialSchema);
 
 module.exports = Raw_Material
