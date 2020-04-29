@@ -63,10 +63,9 @@ const itemSchema = new Schema({
     username_updated: String
 },{
     timestamps:true,
-});
+})
 
 
 //Necesarry Export statement, Do not Change
 const Item = mongoose.model('Item', itemSchema);
-
 module.exports = Item;

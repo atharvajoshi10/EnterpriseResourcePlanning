@@ -34,15 +34,17 @@ router.route('/:id').get((req,res) =>{
 });
 
 //Adding route to update by ID
-router.route('/update/:id').patch((req,res) =>{
-    try{
-        Employee.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
-        .then(employee => {
-            if(!employee){
-                res.status(404).json('Invalid Id!')
-            }
-            res.json('Employee updated!')
-        })
+router.patch('/update/:id', async (req,res) =>{
+   try{
+        const updates = Object.keys(req.body)
+        const employee = await Employee.findById(req.params.id)
+        updates.forEach((update) => employee[update] = req.body[update])
+        await employee.save()
+
+        if(!employee){
+            return res.status(404).json('Invalid Id!')
+        }
+        res.json('Employee updated!')  
     }
     catch(e){
         res.status(400).json('Something went wrong!'+err)
@@ -64,6 +66,16 @@ router.route('/delete/:id').delete((req,res) => {
         res.status(500).json('Something went wrong!'+err)
     }
 });
+
+//Adding a route to login existing employees
+router.post('/login', async (req,res) =>{
+    try{
+        const employee = await Employee.findByCredentials(req.body.e_username, req.body.e_password)
+        res.json(employee)
+    }catch(e){
+        res.status(400).json('Unable to Login!'+e)
+    }
+})
 
 //Necessary export statement, do not change
 module.exports = router;

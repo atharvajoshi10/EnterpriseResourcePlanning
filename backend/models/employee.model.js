@@ -17,8 +17,9 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
-employeeSchema = new Schema({
+const employeeSchema = new Schema({
     e_name : {
         type: String,
         trim:true,
@@ -34,7 +35,8 @@ employeeSchema = new Schema({
     e_address : String,
     e_username : {
         type: String,
-        trim:true,
+        unique:true,
+        trim:true
     },
     e_password : {
         type: String,
@@ -60,6 +62,30 @@ employeeSchema = new Schema({
 },{
     timestamps:true
 })
+
+//Employee Login Function
+employeeSchema.statics.findByCredentials = async (e_username,e_password) =>{
+    const employee = await Employee.findOne({e_username}).select("+e_password")
+    if(!employee){
+        throw new Error('Unable to Login!')
+    }
+    const isMatch = await bcrypt.compare(e_password,employee.e_password)
+    if(!isMatch){
+        throw new Error('Unable to Login!')
+    }
+    return employee
+}
+
+
+//middleware to hash password before add and update operations
+employeeSchema.pre('save', async function(next){
+    const employee = this
+    if (employee.isModified('e_password')) {
+        employee.e_password = await bcrypt.hash(employee.e_password,8)
+    }
+    next()
+});
+
 
 //Required export, do not change
 const Employee = mongoose.model('Employee',employeeSchema)

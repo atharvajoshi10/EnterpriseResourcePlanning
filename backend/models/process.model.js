@@ -36,9 +36,8 @@ const processSchema = new Schema({
     username_updated: String
 },{
     timestamps: true
-});
+})
 
 //Necesarry Export statement, Do not Change
 const Process = mongoose.model('Process', processSchema);
-
 module.exports = Process
