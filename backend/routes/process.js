@@ -2,6 +2,7 @@
 //Author - Atharva Joshi
 
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let Process = require('../models/process.model');
 
 //To access any route localhost:PORT/route...
@@ -10,7 +11,7 @@ let Process = require('../models/process.model');
 //should contain the the process name, any other variable will
 //throw an error
 //Adding a route to view all Processes
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll',auth,(req,res) => {
     Process.find()
     .then(process => res.json(process))
     .catch(err => res.status(500).json('Error:' + err));
@@ -18,7 +19,7 @@ router.route('/viewAll').get((req,res) => {
 
 
 //Adding a route to add a Process
-router.route('/addProcess').post((req,res) => {
+router.post('/addProcess',auth,(req,res) => {
     const newProcess = new Process(req.body)
     newProcess.save()
     .then(() => res.json('Process Added'))
@@ -26,14 +27,14 @@ router.route('/addProcess').post((req,res) => {
 });
 
 //Adding a route to find by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth,(req,res) =>{
     Process.findById(req.params.id)
     .then(process => res.json(process))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding a route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id',auth,(req,res) =>{
     try{
         Process.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(process => {
@@ -49,7 +50,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id',auth,(req,res) => {
     try{
         Process.findByIdAndDelete(req.params.id)
         .then(process =>{

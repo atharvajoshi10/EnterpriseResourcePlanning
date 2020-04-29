@@ -1,6 +1,7 @@
 //Author - Megh Khaire
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let Raw_Material = require('../models/raw_material.model');
 
 //To access any route localhost:PORT/route...
@@ -9,14 +10,14 @@ let Raw_Material = require('../models/raw_material.model');
 //should contain the the process name, any other variable will
 //throw an error
 //Adding a route to view all Raw Materials
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll',auth,(req,res) => {
     Raw_Material.find()
     .then(item => res.json(item))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add Raw Material
-router.route('/addMaterial').post((req,res) => {
+router.post('/addMaterial',auth,(req,res) => {
     const newRaw_Material = new Raw_Material(req.body)
     newRaw_Material.save()
     .then(() => res.json('Material Added'))
@@ -24,14 +25,14 @@ router.route('/addMaterial').post((req,res) => {
 });
 
 //Adding a route to find by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth,(req,res) =>{
     Raw_Material.findById(req.params.id)
     .then(raw_material => res.json(raw_material))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding a route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id',auth,(req,res) =>{
     try{
         Raw_Material.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(raw_material => {
@@ -47,7 +48,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id',auth,(req,res) => {
     try{
         Raw_Material.findByIdAndDelete(req.params.id)
         .then(raw_material =>{

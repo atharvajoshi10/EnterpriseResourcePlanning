@@ -2,6 +2,7 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let FinalProduct = require('../models/final_product.model');
 
 //To access any route localhost:PORT/route...
@@ -11,14 +12,14 @@ let FinalProduct = require('../models/final_product.model');
 //throw an error
 
 //Adding a route to view all Final Products
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll', auth, (req,res) => {
     FinalProduct.find()
     .then(finalproduct => res.json(finalproduct))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Final Product
-router.route('/addFinalProduct').post((req,res) => {
+router.post('/addFinalProduct', auth, (req,res) => {
     const newFinalProduct = new FinalProduct(req.body)
     newFinalProduct.save()
     .then(() => res.json('Final Product Added'))
@@ -26,14 +27,14 @@ router.route('/addFinalProduct').post((req,res) => {
 });
 
 //Adding route to search by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id', auth, (req,res) =>{
     FinalProduct.findById(req.params.id)
     .then(finalproduct => res.json(finalproduct))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id', auth, (req,res) =>{
     try{
         FinalProduct.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(finalproduct => {
@@ -49,7 +50,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id',auth,(req,res) => {
     try{
         FinalProduct.findByIdAndDelete(req.params.id)
         .then(finalproduct =>{

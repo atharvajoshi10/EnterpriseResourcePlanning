@@ -2,6 +2,7 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 const mongoose = require('mongoose')
 let Customer = require('../models/customer.model');
 
@@ -12,14 +13,14 @@ let Customer = require('../models/customer.model');
 //throw an error
 
 //Adding a route to view all Customers
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll', auth, (req,res) => {
     Customer.find()
     .then(customer => res.json(customer))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Customer
-router.route('/addCustomer').post((req,res) => {
+router.post('/addCustomer', auth, (req,res) => {
     const newCustomer = new Customer(req.body)
     newCustomer.save()
     .then(() => res.json('Customer Added'))
@@ -27,14 +28,14 @@ router.route('/addCustomer').post((req,res) => {
 });
 
 //Adding route to search by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth,(req,res) =>{
     Customer.findById(req.params.id)
     .then(customer => res.json(customer))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id', auth, (req,res) =>{
     try{
         Customer.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(customer => {
@@ -50,7 +51,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id', auth, (req,res) => {
     try{
         Customer.findByIdAndDelete(req.params.id)
         .then(customer =>{

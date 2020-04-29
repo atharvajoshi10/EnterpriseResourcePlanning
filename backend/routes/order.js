@@ -2,6 +2,7 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let Order = require('../models/order.model');
 
 //To access any route localhost:PORT/route...
@@ -11,14 +12,14 @@ let Order = require('../models/order.model');
 //throw an error
 
 //Adding a route to view all Orders
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll',auth,(req,res) => {
     Order.find()
     .then(order => res.json(order))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add an Order
-router.route('/addOrder').post((req,res) => {
+router.post('/addOrder',auth,(req,res) => {
     const newOrder = new Order(req.body)
     newOrder.save()
     .then(() => res.json('Order Added'))
@@ -26,14 +27,14 @@ router.route('/addOrder').post((req,res) => {
 });
 
 //Adding route to search by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth,(req,res) =>{
     Order.findById(req.params.id)
     .then(order => res.json(order))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id',auth,(req,res) =>{
     try{
         Order.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(order => {
@@ -49,7 +50,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id',auth,(req,res) => {
     try{
         Order.findByIdAndDelete(req.params.id)
         .then(order =>{

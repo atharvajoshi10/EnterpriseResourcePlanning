@@ -18,6 +18,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const employeeSchema = new Schema({
     e_name : {
@@ -58,7 +59,13 @@ const employeeSchema = new Schema({
     }],
     e_salary : Number,
     username_created : String,
-    username_updated: String
+    username_updated: String,
+    tokens:[{
+        token: {
+            type:String,
+            required:true
+        }
+    }]
 },{
     timestamps:true
 })
@@ -76,6 +83,14 @@ employeeSchema.statics.findByCredentials = async (e_username,e_password) =>{
     return employee
 }
 
+employeeSchema.methods.generateAuthToken = async function() {
+    const employee = this
+    const token = jwt.sign({e_username : employee.e_username},'vedEngineers', {expiresIn:'6 hours'})
+    employee.tokens = employee.tokens.concat({token})
+    await employee.save()
+    return token
+}
+
 
 //middleware to hash password before add and update operations
 employeeSchema.pre('save', async function(next){
@@ -90,3 +105,6 @@ employeeSchema.pre('save', async function(next){
 //Required export, do not change
 const Employee = mongoose.model('Employee',employeeSchema)
 module.exports = Employee
+
+//statics methods are called using Model
+//methods methods are called using instance

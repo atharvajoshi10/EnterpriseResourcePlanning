@@ -2,6 +2,7 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let Machine = require('../models/machine.model');
 
 //To access any route localhost:PORT/route...
@@ -11,14 +12,14 @@ let Machine = require('../models/machine.model');
 //throw an error
 
 //Adding a route to view all Machines
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll',auth,(req,res) => {
     Machine.find()
     .then(machine => res.json(machine))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add a Machine
-router.route('/addMachine').post((req,res) => {
+router.post('/addMachine',auth,(req,res) => {
     const newMachine = new Machine(req.body)
     newMachine.save()
     .then(() => res.json('Machine Added'))
@@ -26,7 +27,7 @@ router.route('/addMachine').post((req,res) => {
 })
 
 //Adding route to search by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth,(req,res) =>{
     Machine.findById(req.params.id)
     .then(machine => res.json(machine))
     .catch(err => res.status(404).json('Invalid Id ' + err));
@@ -34,7 +35,7 @@ router.route('/:id').get((req,res) =>{
 
 
 //Adding route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id',auth,(req,res) =>{
     try{
         Machine.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(machine => {
@@ -50,7 +51,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id',auth,(req,res) => {
     try{
         Machine.findByIdAndDelete(req.params.id)
         .then(machine =>{

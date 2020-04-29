@@ -1,6 +1,7 @@
 //Author - Megh Khaire
 //Import Statements to load the models
 const router = require('express').Router();
+const auth = require('../middleware/auth')
 let Item = require('../models/items.model');
 
 //To access any route localhost:PORT/route...
@@ -9,14 +10,14 @@ let Item = require('../models/items.model');
 //should contain the the process name, any other variable will
 //throw an error
 //Adding a route to view all Items
-router.route('/viewAll').get((req,res) => {
+router.get('/viewAll',auth,(req,res) => {
     Item.find()
     .then(item => res.json(item))
     .catch(err => res.status(500).json('Error:' + err));
 });
 
 //Adding a route to add an Item
-router.route('/addItems').post((req,res) => {
+router.post('/addItems',auth,(req,res) => {
     const newItem = new Item(req.body)
     newItem.save()
     .then(() => res.json('Item Added'))
@@ -24,14 +25,14 @@ router.route('/addItems').post((req,res) => {
 });
 
 //Adding a route to find by ID
-router.route('/:id').get((req,res) =>{
+router.get('/:id',auth, (req,res) =>{
     Item.findById(req.params.id)
     .then(item => res.json(item))
     .catch(err => res.status(404).json('Invalid Id ' + err));
 });
 
 //Adding a route to update by ID
-router.route('/update/:id').patch((req,res) =>{
+router.patch('/update/:id', auth, (req,res) =>{
     try{
         Item.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
         .then(item => {
@@ -47,7 +48,7 @@ router.route('/update/:id').patch((req,res) =>{
 });
 
 //Adding a route to delete by ID
-router.route('/delete/:id').delete((req,res) => {
+router.delete('/delete/:id', auth ,(req,res) => {
     try{
         Item.findByIdAndDelete(req.params.id)
         .then(item =>{
