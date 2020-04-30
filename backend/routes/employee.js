@@ -32,7 +32,7 @@ router.post('/login', async (req,res) =>{
     try{
         const employee = await Employee.findByCredentials(req.body.e_username, req.body.e_password)
         const token = await employee.generateAuthToken()
-        res.json({employee})
+        res.json({employee,token})
     }catch(e){
         res.status(400).json('Unable to Login!'+e)
     }
@@ -49,44 +49,33 @@ router.post('/logout', auth, async (req,res) =>{
     }
 })
 
-//Adding route to search by ID
-router.get('/:id', auth, (req,res) =>{
-    Employee.findById(req.params.id)
-    .then(employee => res.json(employee))
-    .catch(err => res.status(404).json('Invalid Id ' + err));
-});
+router.get('/me',auth,async (req,res) =>{
+    res.json(req.employee)
+})
 
-//Adding route to update by ID
-router.patch('/update/:id',auth, async (req,res) =>{
+//Adding route to update profile
+router.patch('/update/me',auth, async (req,res) =>{
    try{
         const updates = Object.keys(req.body)
-        const employee = await Employee.findById(req.params.id)
-        updates.forEach((update) => employee[update] = req.body[update])
-        await employee.save()
-
-        if(!employee){
-            return res.status(404).json('Invalid Id!')
-        }
-        res.json('Employee updated!')  
+        updates.forEach((update) => req.employee[update] = req.body[update])
+        await req.employee.save()
+        res.send('Employee Updated\n'+req.employee)  
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
-//Adding a route to delete by ID
-router.delete('/delete/:id', auth, (req,res) => {
+//Adding a route to delete profile
+router.delete('/delete/me', auth, (req,res) => {
     try{
-        Employee.findByIdAndDelete(req.params.id)
+        Employee.findByIdAndDelete(req.employee._id)
         .then(employee =>{
-            if(!employee){
-                res.status(404).json('Invalid Id!')
-            }
-            res.json('Employee Deleted!')
+            res.send('Employee Deleted!\n'+employee)
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 
@@ -94,3 +83,26 @@ router.delete('/delete/:id', auth, (req,res) => {
 module.exports = router;
 
 
+//Adding route to search by ID
+// router.get('/:id', auth, (req,res) =>{
+//     Employee.findById(req.params.id)
+//     .then(employee => res.json(employee))
+//     .catch(err => res.status(404).json('Invalid Id ' + err));
+// });
+
+
+//Adding route to delete by id
+// router.delete('/delete/:id', auth, (req,res) => {
+//     try{
+//         Employee.findByIdAndDelete(req.params.id)
+//         .then(employee =>{
+//             if(!employee){
+//                 res.status(404).json('Invalid Id!')
+//             }
+//             res.json('Employee Deleted!')
+//         })
+//     }
+//     catch(e){
+//         res.status(500).json('Something went wrong!'+err)
+//     }
+// });

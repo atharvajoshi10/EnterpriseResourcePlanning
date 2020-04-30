@@ -20,7 +20,10 @@ router.get('/viewAll',auth,(req,res) => {
 
 //Adding a route to add a Machine
 router.post('/addMachine',auth,(req,res) => {
-    const newMachine = new Machine(req.body)
+    const newMachine = new Machine({
+        ...req.body,
+        username_created: req.employee.e_username
+    })
     newMachine.save()
     .then(() => res.json('Machine Added'))
     .catch(err => res.status(400).json('Unable to add Machine ' + err));
@@ -42,11 +45,21 @@ router.patch('/update/:id',auth,(req,res) =>{
             if(!machine){
                 res.status(404).json('Invalid Id!')
             }
+            machine.m_name = req.body.m_name;
+            machine.m_image_location = req.body.m_image_location;
+            machine.m_status = req.body.m_status
+            machine.m_operator = req.body.m_operator;
+            machine.m_purchase_date = req.body.m_purchase_date;
+            machine.m_maintainence = req.body.m_maintainence;
+            machine.m_consumable = req.body.m_consumable;
+            machine.m_cost = req.body.m_cost;
+            machine.username_updated=req.employee.e_username;
+            machine.save()
             res.json('Machine updated!')
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -62,7 +75,7 @@ router.delete('/delete/:id',auth,(req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

@@ -20,7 +20,10 @@ router.get('/viewAll',auth,(req,res) => {
 
 //Adding a route to add an Order
 router.post('/addOrder',auth,(req,res) => {
-    const newOrder = new Order(req.body)
+    const newOrder = new Order({
+        ...req.body,
+        username_created: req.employee.e_username
+    })
     newOrder.save()
     .then(() => res.json('Order Added'))
     .catch(err => res.status(400).json('Unable to add Order ' + err));
@@ -41,11 +44,25 @@ router.patch('/update/:id',auth,(req,res) =>{
             if(!order){
                 res.status(404).json('Invalid Id!')
             }
+            order.customer_id = req.body.customer_id;
+            order.po_number = req.body.po_number;
+            order.po_path = req.body.po_path;
+            order.so_number = req.body.so_number;
+            order.so_path = req.body.so_path;
+            order.invoice_type = req.body.invoice_type;
+            order.transporter = req.body.transporter;
+            order.fp_list = req.body.fp_list;
+            order.fp_cost = req.body.fp_cost;
+            order.item_list = req.body.item_list;
+            order.item_cost = req.body.item_cost;
+            order.tax_mapping = req.body.tax_mapping;
+            order.username_updated=req.employee.e_username;
+            order.save()
             res.json('Order updated!')
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -61,7 +78,7 @@ router.delete('/delete/:id',auth,(req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

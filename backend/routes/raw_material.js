@@ -18,7 +18,10 @@ router.get('/viewAll',auth,(req,res) => {
 
 //Adding a route to add Raw Material
 router.post('/addMaterial',auth,(req,res) => {
-    const newRaw_Material = new Raw_Material(req.body)
+    const newRaw_Material = new Raw_Material({
+        ...req.body,
+        username_created: req.employee.e_username
+    })
     newRaw_Material.save()
     .then(() => res.json('Material Added'))
     .catch(err => res.status(400).json('Unable to add Material' + err));
@@ -39,11 +42,20 @@ router.patch('/update/:id',auth,(req,res) =>{
             if(!raw_material){
                 res.status(404).json('Invalid Id!')
             }
+            raw_material.raw_material_name = req.body.raw_material_name;
+            raw_material.raw_material_id = req.body.raw_material_id;
+            raw_material.description = req.body.description;
+            raw_material.category = req.body.category;
+            raw_material.quantity = req.body.quantity;
+            raw_material.measurement = req.body.measurement;
+            raw_material.unit = req.body.unit;
+            raw_material.username_updated = req.employee.e_username;
+            raw_material.save()
             res.json('Raw Material updated!')
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -59,7 +71,7 @@ router.delete('/delete/:id',auth,(req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

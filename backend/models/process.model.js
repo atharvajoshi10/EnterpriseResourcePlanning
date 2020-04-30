@@ -32,8 +32,14 @@ const processSchema = new Schema({
         type: String,
         trim:true,
     },
-    username_created : String,
-    username_updated: String
+    username_created :{
+        type: String,
+        ref: 'Employee'
+    },
+    username_updated: {
+        type: String,
+        ref: 'Employee'
+    }
 },{
     timestamps: true
 })

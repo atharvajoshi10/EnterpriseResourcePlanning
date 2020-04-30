@@ -59,8 +59,14 @@ const itemSchema = new Schema({
         },
         quantity : Number
     }],
-    username_created : String,
-    username_updated: String
+    username_created :{
+        type: String,
+        ref: 'Employee'
+    },
+    username_updated: {
+        type: String,
+        ref: 'Employee'
+    }
 },{
     timestamps:true,
 })

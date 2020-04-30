@@ -10,8 +10,6 @@
 //e_responsibilities : Description of responsibilies and machine being used to perform that
 //e_status : Currently working on which (product,process)
 //e_salary : Salary
-//username_created : Record user who created the process
-//username_updated : Record user who updated the process
 
 //Required import, Do not change
 const mongoose = require('mongoose')
@@ -24,6 +22,7 @@ const employeeSchema = new Schema({
     e_name : {
         type: String,
         trim:true,
+        required:true
     },
     e_phone : {
         type: String,
@@ -41,8 +40,7 @@ const employeeSchema = new Schema({
     },
     e_password : {
         type: String,
-        trim:true,
-        select:false
+        trim:true
     },
     e_attendance : {
         date : Date,
@@ -58,21 +56,37 @@ const employeeSchema = new Schema({
         p_id : String
     }],
     e_salary : Number,
-    username_created : String,
-    username_updated: String,
     tokens:[{
         token: {
-            type:String,
-            required:true
+            type:String
         }
     }]
 },{
     timestamps:true
 })
 
+//Function to hide password and tokens while retriving data
+employeeSchema.methods.toJSON= function() {
+    const employee = this
+    const employeeObject = employee.toObject()
+    delete employeeObject.e_password
+    delete employeeObject.tokens
+    return employeeObject
+}
+
+
+//Funtion to generate token
+employeeSchema.methods.generateAuthToken = async function() {
+    const employee = this
+    const token = jwt.sign({e_username : employee.e_username},'vedEngineers', {expiresIn:'6 hours'})
+    employee.tokens = employee.tokens.concat({token})
+    await employee.save()
+    return token
+}
+
 //Employee Login Function
 employeeSchema.statics.findByCredentials = async (e_username,e_password) =>{
-    const employee = await Employee.findOne({e_username}).select("+e_password")
+    const employee = await Employee.findOne({e_username})
     if(!employee){
         throw new Error('Unable to Login!')
     }
@@ -82,15 +96,6 @@ employeeSchema.statics.findByCredentials = async (e_username,e_password) =>{
     }
     return employee
 }
-
-employeeSchema.methods.generateAuthToken = async function() {
-    const employee = this
-    const token = jwt.sign({e_username : employee.e_username},'vedEngineers', {expiresIn:'6 hours'})
-    employee.tokens = employee.tokens.concat({token})
-    await employee.save()
-    return token
-}
-
 
 //middleware to hash password before add and update operations
 employeeSchema.pre('save', async function(next){

@@ -46,7 +46,7 @@ router.patch('/update/:id', auth, (req,res) =>{
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -62,7 +62,7 @@ router.delete('/delete/:id', auth, (req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

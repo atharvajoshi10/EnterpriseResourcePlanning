@@ -39,8 +39,14 @@ machineSchema = new Schema({
         m_consumable_quantity : Number
     }],
     m_cost : Number,
-    username_created : String,
-    username_updated: String
+    username_created :{
+        type: String,
+        ref: 'Employee'
+    },
+    username_updated: {
+        type: String,
+        ref: 'Employee'
+    }
 },{
     timestamps : true
 })

@@ -20,7 +20,10 @@ router.get('/viewAll', auth, (req,res) => {
 
 //Adding a route to add a Final Product
 router.post('/addFinalProduct', auth, (req,res) => {
-    const newFinalProduct = new FinalProduct(req.body)
+    const newFinalProduct = new FinalProduct({
+        ...req.body,
+        username_created: req.employee.e_username
+    })
     newFinalProduct.save()
     .then(() => res.json('Final Product Added'))
     .catch(err => res.status(400).json('Unable to add Final Product ' + err));
@@ -36,16 +39,22 @@ router.get('/:id', auth, (req,res) =>{
 //Adding route to update by ID
 router.patch('/update/:id', auth, (req,res) =>{
     try{
-        FinalProduct.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators:true})
+        FinalProduct.findById(req.params.id)
         .then(finalproduct => {
             if(!finalproduct){
                 res.status(404).json('Invalid Id!')
             }
-            res.json('Final Product updated!')
+            finalproduct.fp_name=req.body.fp_name
+            finalproduct.fp_id=req.body.fp_id
+            finalproduct.description = req.body.description;
+            finalproduct.items = req.body.items;
+            finalproduct.username_updated=req.employee.e_username
+            finalproduct.save()
+            res.json('Final Product updated')
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -61,7 +70,7 @@ router.delete('/delete/:id',auth,(req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

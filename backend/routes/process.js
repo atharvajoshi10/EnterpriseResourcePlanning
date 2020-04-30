@@ -20,7 +20,10 @@ router.get('/viewAll',auth,(req,res) => {
 
 //Adding a route to add a Process
 router.post('/addProcess',auth,(req,res) => {
-    const newProcess = new Process(req.body)
+    const newProcess = new Process({
+        ...req.body,
+        username_created: req.employee.e_username
+    })
     newProcess.save()
     .then(() => res.json('Process Added'))
     .catch(err => res.status(400).json('Unable to add Process' + err));
@@ -41,11 +44,18 @@ router.patch('/update/:id',auth,(req,res) =>{
             if(!process){
                 res.status(404).json('Invalid Id!')
             }
+            process.process_name = req.body.process_name;
+            process.process_id = re.body.process_id;
+            process.description = req.body.description;
+            process.worker_id = req.body.worker_id;
+            process.machine_id = req.body.machine_id;
+            process.username_updated=req.employee.e_username;
+            process.save()
             res.json('Process updated!')
         })
     }
     catch(e){
-        res.status(400).json('Something went wrong!'+err)
+        res.status(400).json('Something went wrong!'+e)
     }
 });
 
@@ -61,7 +71,7 @@ router.delete('/delete/:id',auth,(req,res) => {
         })
     }
     catch(e){
-        res.status(500).json('Something went wrong!'+err)
+        res.status(500).json('Something went wrong!'+e)
     }
 });
 

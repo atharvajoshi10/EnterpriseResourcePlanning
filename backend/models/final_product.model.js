@@ -40,8 +40,14 @@ const final_productSchema = new Schema({
         status : String,
         process_list : [String]
     }],
-    username_created : String,
-    username_updated: String
+    username_created :{
+        type: String,
+        ref: 'Employee'
+    },
+    username_updated: {
+        type: String,
+        ref: 'Employee'
+    }
 },{
     timestamps: true
 })
