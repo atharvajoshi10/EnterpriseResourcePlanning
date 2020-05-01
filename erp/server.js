@@ -53,6 +53,7 @@ const publicDirectoryPath = path.join(__dirname,'public')
 //Static Routes
 app.use(express.static(publicDirectoryPath))
 //API Routes
+
 app.use('/process',processRouter);
 app.use('/items',itemsRouter);
 app.use('/customer',customerRouter);
@@ -61,6 +62,11 @@ app.use('/raw_material',raw_materialRouter);
 app.use('/finalproduct',finalproductRouter);
 app.use('/order',orderRouter);
 app.use('/machine',machineRouter);
+
+//Pug Routes
+app.use('/test',(req,res) => {
+    res.render('test')
+});
 
 //Bind the server to listen on port.
 app.listen(port, () =>{
