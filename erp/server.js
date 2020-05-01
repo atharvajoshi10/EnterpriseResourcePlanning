@@ -3,6 +3,7 @@
 */
 
 //Dependencies
+const path = require('path')
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -31,6 +32,10 @@ connection.once('open', () => {
     console.log("MongoDB connection established");
 });
 
+//Setting up pug engine
+app.set('view engine','pug');
+app.set('views',path.join(__dirname,'views'))
+
 //Importing the routes created for the server
 const processRouter = require('./routes/process');
 const itemsRouter = require('./routes/items');
@@ -41,7 +46,13 @@ const finalproductRouter = require('./routes/final_product')
 const orderRouter = require('./routes/order')
 const machineRouter = require('./routes/machine')
 
+// Setting up Static routes
+const publicDirectoryPath = path.join(__dirname,'public')
+
 //Making sure app uses the routes
+//Static Routes
+app.use(express.static(publicDirectoryPath))
+//API Routes
 app.use('/process',processRouter);
 app.use('/items',itemsRouter);
 app.use('/customer',customerRouter);
