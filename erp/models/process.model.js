@@ -39,6 +39,10 @@ const processSchema = new Schema({
     username_updated: {
         type: String,
         ref: 'Employee'
+    },
+    process_thumbnail_location: {
+        type: String,
+        default: '/img/process/process.jpg'
     }
 },{
     timestamps: true

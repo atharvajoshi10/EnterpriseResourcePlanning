@@ -42,6 +42,10 @@ const raw_materialSchema = Schema({
     username_updated: {
         type: String,
         ref: 'Employee'
+    },
+    raw_material_thumbnail_location: {
+        type: String,
+        default: '/img/raw_material/raw_material.jpg'
     }
 },{
     timestamps: true
