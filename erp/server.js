@@ -32,6 +32,8 @@ connection.once('open', () => {
     console.log("MongoDB connection established");
 });
 
+// Setting up Static routes
+const publicDirectoryPath = path.join(__dirname,'public')
 //Setting up pug engine
 app.set('view engine','pug');
 app.set('views',path.join(__dirname,'views'))
@@ -46,29 +48,26 @@ const finalproductRouter = require('./routes/final_product')
 const orderRouter = require('./routes/order')
 const machineRouter = require('./routes/machine')
 
-// Setting up Static routes
-const publicDirectoryPath = path.join(__dirname,'public')
+//Importing routes created for views
+const viewRouter = require('./routes/viewRoutes')
 
 //Making sure app uses the routes
 //Static Routes
 app.use(express.static(publicDirectoryPath))
 //API Routes
-
-app.use('/process',processRouter);
-app.use('/items',itemsRouter);
-app.use('/customer',customerRouter);
-app.use('/employee',employeeRouter);
-app.use('/raw_material',raw_materialRouter);
-app.use('/finalproduct',finalproductRouter);
+app.use('/api/process',processRouter);
+app.use('/api/items',itemsRouter);
+app.use('/api/customer',customerRouter);
+app.use('/api/employee',employeeRouter);
+app.use('/api/raw_material',raw_materialRouter);
+app.use('/api/finalproduct',finalproductRouter);
 app.use('/order',orderRouter);
 app.use('/machine',machineRouter);
-
-//Pug Routes
-app.use('/test',(req,res) => {
-    res.render('test')
-});
+//View Routes
+app.use('/finalproduct',viewRouter);
+app.use('/process',viewRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{
     console.log(`Server is running on port: ${port}`);
-})
+});
