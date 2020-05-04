@@ -53,7 +53,11 @@ const viewRouter = require('./routes/viewRoutes')
 
 //Making sure app uses the routes
 //Static Routes
-app.use(express.static(publicDirectoryPath))
+app.use(express.static(publicDirectoryPath))  
+app.get('/', function(req, res) {
+    res.render('index.html');
+});
+
 //API Routes
 app.use('/api/process',processRouter);
 app.use('/api/items',itemsRouter);
@@ -64,8 +68,7 @@ app.use('/api/finalproduct',finalproductRouter);
 app.use('/order',orderRouter);
 app.use('/machine',machineRouter);
 //View Routes
-app.use('/finalproduct',viewRouter);
-app.use('/process',viewRouter);
+app.use('/',viewRouter);
 
 //Bind the server to listen on port.
 app.listen(port, () =>{

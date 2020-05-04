@@ -2,12 +2,17 @@ extends base
 
 block content
     button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
-    .container.mt-5
-        .card.pull-right.mt-3.mb-3.mr-5.ml-5(style='width: 10rem;height:10rem')
-                img.card-img(src=`${process.process_thumbnail_location}`, alt='Process image',style='width: 10rem;height:10rem')
-        .jumbotron.h-100.w-100
-            h1.display-5=process.process_name
-            p.lead=process.description
+    .container.mt-3
+        
+        .jumbotron.h-100.w-100.pt-5
+            .row.mb-5.mr-0.ml-0.w-100
+                .col-sm-6
+                    h1.display-5=process.process_name
+                    p.lead=process.description
+                .col-sm-6
+                    .card.float-right(style='width: 10rem;height:10rem')
+                        img.card-img(src=`${process.process_thumbnail_location}`, alt='Process image',style='width: 10rem;height:10rem')
+                
             .row
                 .col-sm-6
                     .card.mb-3.border-info
@@ -35,5 +40,5 @@ block content
                             li.list-group-item Item: 4
                             li.list-group-item Item: 5
             .d-inline-flex.float-left
-                a.btn.btn-outline-primary.mr-3.btn-lg Edit
-                a.btn.btn-outline-danger.mr-3.btn-lg Delete
+                a(href='/process/update/'+process._id).btn.btn-outline-primary.mr-3.btn-lg Edit
+                a(href='/process/delete/'+process._id).btn.btn-outline-danger.mr-3.btn-lg Delete

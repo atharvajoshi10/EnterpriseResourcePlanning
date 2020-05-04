@@ -1,0 +1,21 @@
+extends base
+
+block content
+    .container
+        table.table.table-hover.mt-5
+            thead
+            tr.table-primary
+                th(scope='col') Raw Material Name 
+                th(scope='col') Raw Material Id
+                th(scope='col').text-center Details
+
+            tbody
+            each raw_material in raw_materials
+                tr
+                    td
+                        i.fas.fa-hammer.fa-lg.mr-3   
+                        =raw_material.raw_material_name 
+                    td=raw_material.raw_material_id
+                    td.text-center
+                        a(href='/raw_material/'+raw_material._id)
+                            i.fas.fa-long-arrow-alt-right.fa-2x
