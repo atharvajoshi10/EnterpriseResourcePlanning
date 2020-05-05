@@ -44,18 +44,17 @@ const itemSchema = new Schema({
         default:0
     },
     process_list: [{
-        process_id: {
-            type: String,
-            required: true,
-            trim:true
+        process: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Process'
         },
         scheduled_date: Date,
         instructions: String
     }],
     attached_materials: [{
-        material_id : {
-            type: String,
-            trim:true
+        material : {
+            type:  mongoose.Schema.Types.ObjectId,
+            ref:'Raw_Material'
         },
         quantity : Number
     }],
@@ -66,6 +65,10 @@ const itemSchema = new Schema({
     username_updated: {
         type: String,
         ref: 'Employee'
+    },
+    item_thumbnail_location: {
+        type: String,
+        default: '/img/items/item.jpg'
     }
 },{
     timestamps:true,
