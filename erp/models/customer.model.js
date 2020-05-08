@@ -20,20 +20,23 @@ const validator = require('validator')
 customerSchema = new Schema({
     c_name : {
         type: String,
+        required: [true, 'Customer name must be specified!'],
         trim:true
     },
     c_phone : {
         type: String,
+        unique: true,
         validate(value){
             if(!validator.isMobilePhone(value,"en-IN")){
                 throw new Error('Phone number is invalid')
             }
-        }   
+        }  
     },
     c_email: {
         type: String,
         trim:true,
-        required: true,
+        required: [true,'Customer email Id must be specified!'],
+        unique: true,
         validate(value){
             if(!validator.isEmail(value)){
                 throw new Error('Email is invalid')

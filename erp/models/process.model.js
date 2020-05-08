@@ -17,11 +17,13 @@ const processSchema = new Schema({
     process_name: {
         type: String,
         trim: true,
-        required: true
+        required: [true,'Process name must be specified!']
     },
     process_id :{
         type: String,
-        trim:true
+        unique: true,
+        trim:true,
+        required: [true,'Process ID must be specified!']
     },
     description: String,
     worker_id: {

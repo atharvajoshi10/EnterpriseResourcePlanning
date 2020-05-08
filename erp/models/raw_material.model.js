@@ -17,23 +17,31 @@ const Schema = mongoose.Schema;
 const raw_materialSchema = Schema({
     raw_material_name: {
         type: String,
-        required: true
+        required :[true,'Raw Material name must be specified!'],
     },
     raw_material_id :{
         type: String,
-        trim:true
+        unique: true,
+        trim:true,
+        required :[true,'Raw Material Id must be specified!'],
     },
     description: String,
     category :{
         type:String,
-        enum:['Raw', 'Consumable'],
-        required : true
+        required :[true,'Raw Material Category must be specified!'],
+        enum:{
+            values: ['Raw', 'Consumable'],
+            message: 'Category is either: Raw or Consumable'
+        }
     },
     quantity: Number,
     measurement : String,
     unit :{
         type:String,
-        enum:['Weight','Metrics','Volume','Quantity']
+        enum:{
+            values: ['Weight','Metrics','Volume','Quantity'],
+            message: 'Unit is either: Weight, Metrics, Volume or Quantity'
+        }
     },
     username_created :{
         type: String,

@@ -19,11 +19,15 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 orderSchema = new Schema({
-    customer_id: String,
+    customer_id: {
+        type: String,
+        unique: true,
+        required: [true,'Customer Id must be specified!']
+    },
     po_number :{
         type : String,
         trim:true,
-        required : true
+        required: [true,'Order number must be specified!']
     },
     po_path: {
         type:String,

@@ -28,10 +28,16 @@ router.post('/addItems',auth,(req,res) => {
 });
 
 //Adding a route to find by ID
-router.get('/:id',auth, (req,res) =>{
-    Item.findById(req.params.id)
-    .then(item => res.json(item))
-    .catch(err => res.status(404).json('Invalid Id ' + err));
+router.get('/:id',auth, async (req,res) =>{
+    try{
+        const item = await Item.findById(req.params.id).populate('process_list.process').populate('attached_materials.material')
+        if(!item){
+            res.status(404).send('Invalid Id')
+        }
+        res.send(item)
+    }catch(e){
+        res.status(500).send('Error: '+e)
+    }
 });
 
 //Adding a route to update by ID
@@ -46,7 +52,6 @@ router.patch('/update/:id', auth, (req,res) =>{
             item.item_id = req.body.item_id;
             item.description = req.body.description;
             item.drawing_number = req.body.drawing_number;
-            item.drawing_location = req.body.drawing_location;
             item.drawing_revision_number = req.body.drawing_revision_number;
             item.process_list = req.body.process_list;
             item.attached_materials = req.body.attached_materials;

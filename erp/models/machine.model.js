@@ -19,6 +19,7 @@ machineSchema = new Schema({
     m_name: {
         type: String,
         trim:true,
+        required: [true,'Machine name must be specified!']
     },
     m_image_location : {
         type:String,

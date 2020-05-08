@@ -7,6 +7,7 @@ block content
             tr.table-primary
                 th(scope='col') Process Name 
                 th(scope='col') Process Id
+                th(scope='col') Created At
                 th(scope='col').text-center Details
 
             tbody
@@ -16,6 +17,7 @@ block content
                         i.fas.fa-cog.fa-lg.mr-2   
                         =process.process_name 
                     td=process.process_id
+                    td=process.createdAt.toLocaleString()
                     td.text-center
                         a(href='/process/'+process._id)
                             i.fas.fa-long-arrow-alt-right.fa-2x

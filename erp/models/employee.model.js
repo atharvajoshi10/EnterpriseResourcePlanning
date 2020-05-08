@@ -22,10 +22,12 @@ const employeeSchema = new Schema({
     e_name : {
         type: String,
         trim:true,
-        required:true
+        required: [true,'Employee name must be specified!']
     },
     e_phone : {
         type: String,
+        unique: true,
+        required: [true,"Employee's contact number must be specified!"],
         validate(value){
             if(!validator.isMobilePhone(value,"en-IN")){
                 throw new Error('Phone number is invalid')
