@@ -20,11 +20,13 @@ const final_productSchema = new Schema({
     fp_name : {
         type: String,
         trim:true,
-        required: true
+        required: [true,'Final Product name must be specified!!']
     },
     fp_id :{
         type: String,
-        trim:true
+        trim:true,
+        unique: true,
+        required: [true, 'Final Product ID must be specified!']
     },
     description: String,
     items : [{

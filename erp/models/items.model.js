@@ -22,34 +22,35 @@ const Schema = mongoose.Schema;
 const itemSchema = new Schema({
     item_name:{
         type: String,
-        required: true,
+        required: [true,'Item name must be specified!'],
         trim:true
     },
     item_id :{
         type: String,
-        trim:true
+        unique: true,
+        trim:true,
+        required: [true,'Item id must be specified!']
     },
     description: String,
     drawing_number:{
         type: String,
-        required: true,
         trim:true
     },
     drawing_location: {
         type:String,
-        trim:true
+        default: '/drawings/sample-pdf-file.pdf'
     },
     drawing_revision_number:{
         type:Number,
-        default:0
+        default:-1
     },
     process_list: [{
         process: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'Process'
         },
-        scheduled_date: Date,
-        instructions: String
+        scheduled_date: Date
+        //instructions: String
     }],
     attached_materials: [{
         material : {

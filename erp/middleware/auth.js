@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken')
-const Employee = require('../models/employee.model')
+const jwt = require('jsonwebtoken');
+const Employee = require('../models/employee.model');
 //Middleware Function for Authorization
 const auth = async (req,res,next) => {
     // try{

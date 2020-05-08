@@ -7,6 +7,7 @@ block content
             tr.table-primary
                 th(scope='col') Raw Material Name 
                 th(scope='col') Raw Material Id
+                th(scope='col') Created At
                 th(scope='col').text-center Details
 
             tbody
@@ -16,6 +17,7 @@ block content
                         i.fas.fa-hammer.fa-lg.mr-3   
                         =raw_material.raw_material_name 
                     td=raw_material.raw_material_id
+                    td=process.createdAt.toLocaleString()
                     td.text-center
                         a(href='/raw_material/'+raw_material._id)
                             i.fas.fa-long-arrow-alt-right.fa-2x

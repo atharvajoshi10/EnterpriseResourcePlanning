@@ -1,0 +1,99 @@
+doctype html
+html
+    head    
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/yeti/bootstrap.min.css' 
+        integrity='sha384-bWm7zrSUE5E+21rA9qdH5frkMpXvqjQm/WJw4L5PYQLNHrywI5zs5saEjIcCdGu1' crossorigin='anonymous')
+        link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.5.0/css/all.css', 
+        integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU', crossorigin='anonymous')
+        title #{title}
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script.
+            $(document).ready(function(){
+                $("#edit").click(function() {
+                    $( "#sortable" ).sortable();
+                    $( "#sortable" ).disableSelection();
+                });
+            });
+    body
+        //Header
+        include _header
+        button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
+        .container.mt-3
+            .jumbotron.h-100.w-100.pt-5
+                .row.mb-5.mr-0.ml-0.w-100
+                    .col-sm-6
+                        h1.display-5=item.item_name
+                        p.lead=item.description
+                    .col-sm-6
+                        .card.float-right(style='width: 10rem;height:10rem')
+                            img.card-img(src=`${item.item_thumbnail_location}`, alt='Item image',style='width: 10rem;height:10rem').mb-3
+                            input(type='file', accept='image/*', id='photo', name='thumbnail')
+                            lablel(for='photo') Choose new thumbnail
+
+                    
+                .row.mb-5
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Details
+                                ul.list-group.list-group-flush
+                                li.list-group-item item Id: 
+                                    =item.item_id   
+                                li.list-group-item Username Created: 
+                                    =item.username_created
+                                li.list-group-item Username Updated: 
+                                    =item.username_updated
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Recents
+                                ul.list-group.list-group-flush
+                                li.list-group-item Product: 1
+                                li.list-group-item Product: 2
+                                li.list-group-item Product: 3
+                                li.list-group-item Product: 4
+                                li.list-group-item Product: 5
+                .row.mb-5
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Process List
+                                #sortable
+                                    ul.list-group.list-group-flush
+                                    each processes in item.process_list
+                                        li.list-group-item 
+                                            a(href='/process/'+processes.process._id)=processes.process.process_name
+                                            |   
+                                            =processes.scheduled_date  
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Raw Material List
+                                ul.list-group.list-group-flush
+                                each materials in item.attached_materials
+                                    li.list-group-item 
+                                        a(href='/raw_material/'+materials.material._id)=materials.material.raw_material_name
+                                        |   
+                                        =materials.quantity
+                                        
+                .row
+                    .col-sm-6
+                        .d-inline-flex.float-left
+                            a(href='/items/update/'+item._id).btn.btn-outline-primary.mr-3.btn-lg Edit
+                            a(href='/items/delete/'+item._id).btn.btn-outline-danger.mr-3.btn-lg Delete
+                    .col-sm-6
+                        .card
+                            .card-body
+                                h4.card-title.mb-2.text-muted Drawing
+                                div.mb-3.text-center 
+                                    a(href=`${item.drawing_location}`, target='_blank')
+                                        img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 4rem;height:4rem')
+                                ul.list-group.list-group-flush
+                                li.list-group-item Drawing Number: 
+                                    =item.drawing_number
+                                li.list-group-item Revision Number: 
+                                    =item.drawing_revision_number
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')

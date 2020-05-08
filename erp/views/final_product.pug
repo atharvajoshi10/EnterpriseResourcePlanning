@@ -1,22 +1,4 @@
-extends base
-
-block content
-    .container
-        table.table.table-hover.mt-5
-            thead
-            tr.table-primary
-                th(scope='col') Product Name 
-                th(scope='col') Product Id
-                th(scope='col') Description
-                th(scope='col')
-
-            tbody
-            each product in finalproduct
-                tr.table-light
-                    td=product.fp_name 
-                    td=product.fp_id
-                    td=product.description
-                    td.md-4
-                        a(href='#') Edit 
-                        | | 
-                        a(href='#') Details
+doctype html
+html
+    head  
+    body

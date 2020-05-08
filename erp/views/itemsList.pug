@@ -1,0 +1,23 @@
+extends base
+
+block content
+    .container
+        table.table.table-hover.mt-5
+            thead
+            tr.table-primary
+                th(scope='col') Item Name 
+                th(scope='col') Item Id
+                th(scope='col') Created At
+                th(scope='col').text-center Details
+
+            tbody
+            each item in items
+                tr
+                    td
+                        i.fas.fa-shopping-cart.fa-lg.mr-3   
+                        =item.item_name 
+                    td=item.item_id
+                    td=item.createdAt.toLocaleString()
+                    td.text-center
+                        a(href='/items/'+item._id)
+                            i.fas.fa-long-arrow-alt-right.fa-2x
