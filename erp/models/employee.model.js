@@ -12,11 +12,12 @@
 //e_salary : Salary
 
 //Required import, Do not change
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const validator = require('validator')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const AppError = require('../utils/appError');
 
 const employeeSchema = new Schema({
     e_name : {
@@ -42,7 +43,13 @@ const employeeSchema = new Schema({
     },
     e_password : {
         type: String,
-        trim:true
+        trim:true,
+        minlength: [8,'Password length must be greater than 8']
+    },
+    e_role: {
+        type: String,
+        enum: ['user','admin'],
+        default: 'user'
     },
     e_attendance : {
         date : Date,
@@ -76,25 +83,24 @@ employeeSchema.methods.toJSON= function() {
     return employeeObject
 }
 
-
 //Funtion to generate token
 employeeSchema.methods.generateAuthToken = async function() {
-    const employee = this
-    const token = jwt.sign({e_username : employee.e_username},'vedEngineers', {expiresIn:'6 hours'})
-    employee.tokens = employee.tokens.concat({token})
-    await employee.save()
-    return token
+    const employee = this;
+    const token = jwt.sign({e_username : employee.e_username}, process.env.JWT_SECRET, {expiresIn:process.env.JWT_EXPIRES_IN});
+    employee.tokens = employee.tokens.concat({token});
+    await employee.save();
+    return token;
 }
 
 //Employee Login Function
 employeeSchema.statics.findByCredentials = async (e_username,e_password) =>{
     const employee = await Employee.findOne({e_username})
     if(!employee){
-        throw new Error('Unable to Login!')
+        return;
     }
     const isMatch = await bcrypt.compare(e_password,employee.e_password)
     if(!isMatch){
-        throw new Error('Unable to Login!')
+        return;
     }
     return employee
 }
