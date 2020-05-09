@@ -2,8 +2,8 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
-const auth = require('../middleware/auth')
-const mongoose = require('mongoose')
+const auth = require('../middleware/auth');
+const restrict = require('../middleware/restrict');
 let Employee = require('../models/employee.model');
 
 //To access any route localhost:PORT/route...
@@ -13,18 +13,10 @@ let Employee = require('../models/employee.model');
 //throw an error
 
 //Adding a route to view all Employees
-router.get('/viewAll',auth,(req,res) => {
+router.get('/viewAll',auth, restrict,(req,res) => {
     Employee.find()
     .then(employee => res.json(employee))
     .catch(err => res.status(500).json('Error:' + err));
-});
-
-//Adding a route to add a Employee
-router.route('/addEmployee').post((req,res) => {
-    const newEmployee = new Employee(req.body)
-    newEmployee.save()
-    .then(() => res.json('Employee Added'))
-    .catch(err => res.status(400).json('Unable to add Employee' + err));
 });
 
 //Adding a route to login existing employees
@@ -82,17 +74,25 @@ router.delete('/delete/me', auth, (req,res) => {
 //Necessary export statement, do not change
 module.exports = router;
 
+//For Super-user
 
-//Adding route to search by ID
-// router.get('/:id', auth, (req,res) =>{
+// Adding a route to add a Employee super-user
+// router.post('/addEmployee', auth, restric, async (req,res) => {
+//     const newEmployee = new Employee(req.body)
+//     newEmployee.save()
+//     .then(() => res.json('Employee Added'))
+//     .catch(err => res.status(400).json('Unable to add Employee' + err));
+// });
+
+// Adding route to search by ID
+// router.get('/:id', auth, restrict, (req,res) =>{
 //     Employee.findById(req.params.id)
 //     .then(employee => res.json(employee))
 //     .catch(err => res.status(404).json('Invalid Id ' + err));
 // });
 
-
-//Adding route to delete by id
-// router.delete('/delete/:id', auth, (req,res) => {
+// Adding route to delete by id
+// router.delete('/delete/:id', auth, restrict, (req,res) => {
 //     try{
 //         Employee.findByIdAndDelete(req.params.id)
 //         .then(employee =>{
