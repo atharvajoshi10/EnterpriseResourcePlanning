@@ -10,10 +10,6 @@ const finalProductController = require('../controllers/final_product.controller'
 //Import Statement to load Middleware
 const auth = require('../middleware/auth')
 
-//Process Routes
-router.get('/process/', auth, processController.getProcesses);
-router.get('/process/:id',auth, processController.getProcessById);
-
 //Raw Material Routes
 router.get('/raw_material/', auth, raw_materialController.getRawMaterials);
 router.get('/raw_material/:id',auth, raw_materialController.getRawMaterialById);
@@ -25,7 +21,7 @@ router.post('/items/uploadPdf/:id', auth, itemsController.uploadDrawingPdf, item
 //router.delete('/items/deletePdf/:id',auth,itemsController.deleteDrawingPdf, itemsController.deleteDrawingLocation);
 
 //Final Product Routes
-//router.get('/final_product/', auth, finalProductController.getFinalProducts);
+router.get('/final_product/', auth, finalProductController.getFinalProducts);
 //router.get('/final_product/:id', auth, finalProductController.getFinalProductById);
 
 module.exports = router;

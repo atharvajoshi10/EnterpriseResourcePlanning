@@ -1,8 +1,8 @@
-extends base
+extends ../base
 
 block content
     .container
-        table.table.table-hover.mt-5
+        table.table.table-hover.mt-5.bg-white
             thead
             tr.table-primary
                 th(scope='col') Item Name 
@@ -20,4 +20,4 @@ block content
                     td=item.createdAt.toLocaleString()
                     td.text-center
                         a(href='/items/'+item._id)
-                            i.fas.fa-long-arrow-alt-right.fa-2x
+                            i.fas.fa-share.fa-2x

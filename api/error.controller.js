@@ -37,19 +37,18 @@ module.exports = (err,req,res,next) => {
     if(err.name === 'TokenExpiredError') err = handleJWTExpiredError();
     //Operational Error: Send to Client
     if(err.isOperational){
-        console.error(err);
-        return res.status(err.statusCode).render('error',{
-            title: 'Something went wrong!',
-            msg: err.message,
-            statusCode: err.statusCode
+        res.status(err.statusCode).json({
+            status: err.status,
+            error:err,
+            message: err.message,
+            stack: err.stack,
         });
     }//Programming or other unknown error: don't leak error details    
     else{
         console.error(err);
-        return res.status(500).render('error',{
-            title: 'Oops! Something went wrong!',
-            msg: 'Please try again later',
-            statusCode: 'Something went wrong!'
+        res.status(500).json({
+            status: 'error',
+            message: 'Oops! Something went wrong.'
         });
     }
 };

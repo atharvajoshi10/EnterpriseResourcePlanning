@@ -2,9 +2,9 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
-const auth = require('../middleware/auth');
-const restrict = require('../middleware/restrict');
-let Employee = require('../models/employee.model');
+const auth = require('../erp/middleware/auth');
+const restrict = require('../erp/middleware/restrict');
+let Employee = require('../erp/models/employee.model');
 
 //To access any route localhost:PORT/route...
 //Note Make sure JSON response contains the same variable name

@@ -31,8 +31,9 @@ block content
                                 =raw_material.unit
                             li.list-group-item Username Created: 
                                 =raw_material.username_created
-                            li.list-group-item Username Updated: 
-                                =raw_material.username_updated
+                            if raw_material.username_updated
+                                li.list-group-item Username Updated: 
+                                    =raw_material.username_updated
                 .col-sm-6
                     .card.mb-3.border-info.h-100
                         .card-body

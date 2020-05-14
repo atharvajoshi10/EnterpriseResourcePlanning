@@ -1,8 +1,8 @@
 //Author - Megh Khaire
 //Import Statements to load the models
 const router = require('express').Router();
-const auth = require('../middleware/auth')
-let Raw_Material = require('../models/raw_material.model');
+const auth = require('../erp/middleware/auth')
+let Raw_Material = require('../erp/models/raw_material.model');
 
 //To access any route localhost:PORT/route...
 //Note Make sure JSON response contains the same variable name

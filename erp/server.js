@@ -7,6 +7,9 @@ const path = require('path')
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+
+//Depedencies for increasing security
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -33,8 +36,10 @@ const app = express()
 const port = process.env.PORT || 5000;
 
 //Ensuring Cors is used and server parses json files
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+//Parses data from cookies
+app.use(cookieParser());
 
 //GLOBAL MIDDLEWARES
 //Set security HTTP Headers
@@ -74,27 +79,18 @@ connection.once('open', () => {
 
 // Setting up Static routes
 const publicDirectoryPath = path.join(__dirname,'public');
-
 //Setting up pug engine
+const viewPath = [path.join(__dirname,'views'),path.join(__dirname,'views/process'),path.join(__dirname,'views/raw_material'),
+                path.join(__dirname,'views/employee'),path.join(__dirname,'views/customer'), path.join(__dirname,'views/order'), 
+                path.join(__dirname,'views/machine'), path.join(__dirname,'views/final_product'), path.join(__dirname,'views/items')];
 app.set('view engine','pug');
-app.set('views',path.join(__dirname,'views'));
-
-//Importing the routes created for api
-const processApiRouter = require('./routes/process');
-const itemsApiRouter = require('./routes/items');
-const customerApiRouter = require('./routes/customer');
-const employeeApiRouter = require('./routes/employee');
-const raw_materialApiRouter = require('./routes/raw_material');
-const finalproductApiRouter = require('./routes/final_product');
-const orderApiRouter = require('./routes/order');
-const machineApiRouter = require('./routes/machine');
+app.set('views',viewPath);
 
 //Importing routes created for views
 const viewRouter = require('./routes/view.routes');
-//Importing routes created for employee
+const processRouter = require('./routes/process.routes');
 const employeeRouter = require('./routes/employee.routes');
-//Importing routes created for admin
-const adminRouter = require('./routes/admin.routes');
+//const adminRouter = require('./routes/admin.routes');
 
 //Making sure app uses the routes
 //Static Routes
@@ -103,20 +99,11 @@ app.get('/', function(req, res) {
     res.render('index.html');
 });
 
-//API Routes
-app.use('/api/process',processApiRouter);
-app.use('/api/items',itemsApiRouter);
-app.use('/api/customer',customerApiRouter);
-app.use('/api/employee',employeeApiRouter);
-app.use('/api/raw_material',raw_materialApiRouter);
-app.use('/api/finalproduct',finalproductApiRouter);
-app.use('/api/order',orderApiRouter);
-app.use('/api/machine',machineApiRouter);
-
 //View Routes
 app.use('/',viewRouter);
-app.use('/',employeeRouter);
-app.use('/admin/',employeeRouter);
+app.use('/process',processRouter);
+app.use('/employee',employeeRouter);
+//app.use('/admin/',adminRouter);
 
 //##########Error Handling Routes##########//
 //Undefined Routes Error

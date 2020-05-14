@@ -87,8 +87,8 @@ employeeSchema.methods.toJSON= function() {
 employeeSchema.methods.generateAuthToken = async function() {
     const employee = this;
     const token = jwt.sign({e_username : employee.e_username}, process.env.JWT_SECRET, {expiresIn:process.env.JWT_EXPIRES_IN});
-    employee.tokens = employee.tokens.concat({token});
-    await employee.save();
+    // employee.tokens = employee.tokens.concat({token});
+    // employee.save();
     return token;
 }
 
