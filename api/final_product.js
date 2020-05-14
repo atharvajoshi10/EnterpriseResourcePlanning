@@ -2,9 +2,9 @@
 
 //Import Statements to load the models
 const router = require('express').Router();
-let FinalProduct = require('../models/final_product.model');
+let FinalProduct = require('../erp/models/final_product.model');
 //Import Statement to load middleware
-const auth = require('../middleware/auth')
+const auth = require('../erp/middleware/auth')
 
 //To access any route localhost:PORT/route...
 //Note Make sure JSON response contains the same variable name

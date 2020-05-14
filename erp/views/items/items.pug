@@ -1,0 +1,136 @@
+doctype html
+html
+    head    
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/yeti/bootstrap.min.css' 
+        integrity='sha384-bWm7zrSUE5E+21rA9qdH5frkMpXvqjQm/WJw4L5PYQLNHrywI5zs5saEjIcCdGu1' crossorigin='anonymous')
+        link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.5.0/css/all.css', 
+        integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU', crossorigin='anonymous')
+        title #{title}
+        style.
+            body{
+                background-image: linear-gradient(to bottom,#008cba 0%,#004e92 50%,#000428 100%);
+                min-width: 768px;
+                user-select: none;
+                -moz-user-select: none;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }    
+    body
+        //Header
+        include ../_header
+        button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
+        .container.mt-3
+            .jumbotron.h-100.w-100.pt-5
+                .row.mb-5.mr-0.ml-0.w-100
+                    .col-sm-6
+                        h1.display-5=item.item_name
+                        p.lead=item.description
+                    .col-sm-6
+                        .card.float-right(style='width: 10rem;height:10rem')
+                            img.card-img(src=`${item.item_thumbnail_location}`, alt='Item image',style='width: 10rem;height:10rem').mb-3
+
+                    
+                .row.mb-5
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Details
+                                ul.list-group.list-group-flush
+                                li.list-group-item item Id: 
+                                    =item.item_id   
+                                li.list-group-item Username Created: 
+                                    =item.username_created
+                                if item.username_updated
+                                    li.list-group-item Username Updated: 
+                                        =item.username_updated
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                h4.card-title.mb-2.text-muted Recents
+                                ul.list-group.list-group-flush
+                                li.list-group-item Product: 1
+                                li.list-group-item Product: 2
+                                li.list-group-item Product: 3
+                                li.list-group-item Product: 4
+                                li.list-group-item Product: 5
+                .row.mb-5
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                .d-inline-flex.mb-2.w-100.justify-content-between
+                                    h4.card-title.text-muted Process List
+                                    button.btn.btn-info(type='button', id='editProcessList' name='editProcessList') Edit
+                                table.table.table-hover.mt-2.bg-white
+                                    thead
+                                    tr.table-info
+                                        th(scope='col') Process Name 
+                                        th(scope='col') Scheduled Date
+                                        th(scope='col') Status
+                                    tbody#sortable
+                                        each processes in item.process_list
+                                            tr
+                                                td
+                                                    a.mr-5(href='/process/'+processes.process._id)=processes.process.process_name
+                                                td
+                                                    span.mr-5=processes.scheduled_date.toDateString()
+                                                td
+                                                    case `${processes.status}`
+                                                        when "approved"
+                                                            span.badge.badge-pill.badge-info Approved
+                                                        when "delayed"
+                                                            span.badge.badge-pill.badge-warning Delayed
+                                                        when "completed"
+                                                            span.badge.badge-pill.badge-success Completed  
+        
+                    .col-sm-6
+                        .card.mb-3.border-info.h-100
+                            .card-body
+                                .d-inline-flex.mb-2.w-100.justify-content-between
+                                    h4.card-title.text-muted Raw Material List
+                                    button.btn.btn-info(type='button', id='editProcessList' name='editProcessList') Edit
+                                table.table.table-hover.mt-2.bg-white
+                                    thead
+                                    tr.table-info
+                                        th(scope='col') Raw Material name 
+                                        th(scope='col') Quantity
+                                    tbody
+                                        each materials in item.attached_materials
+                                            tr
+                                                td
+                                                    a(href='/raw_material/'+materials.material._id)=materials.material.raw_material_name
+                                                td
+                                                    span.mr-5=materials.quantity               
+                .row
+                    .col-sm-6
+                        .card
+                            .card-body
+                                h4.card-title.mb-2.text-muted Drawing
+                                table.table.table-hover.mt-3.bg-white
+                                    thead
+                                    tr.table-info
+                                        th(scope='col') Drawing Number
+                                        th(scope='col') Revision Number
+                                        th(scope='col') Drawing pdf
+                                    tbody
+                                        tr
+                                            td=item.drawing_number 
+                                            td=item.drawing_revision_number
+                                            td.text-center
+                                                a(href=`${item.drawing_location}`, target='_blank')
+                                                    img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 1.5rem;height:1.5rem')  
+                                            
+                    .col-sm-6.align-items-end
+                        .d-inline-flex.float-right.mt-5
+                            a(href='/items/update/'+item._id).btn.btn-outline-primary.mr-3.btn-lg Edit
+                            a(href='/items/delete/'+item._id).btn.btn-outline-danger.mr-3.btn-lg Delete
+                            
+                    
+
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script(src='/resources/js/items/sortable.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+        script(src='/resources/js/alert.js')
+        script(src='/resources/js/logout.js')

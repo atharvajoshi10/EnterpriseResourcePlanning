@@ -1,4 +1,4 @@
-extends base
+extends ../base
 
 block content
     button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
@@ -13,9 +13,9 @@ block content
                     .card.float-right(style='width: 10rem;height:10rem')
                         img.card-img(src=`${process.process_thumbnail_location}`, alt='Process image',style='width: 10rem;height:10rem')
                 
-            .row
+            .row.mb-5
                 .col-sm-6
-                    .card.mb-3.border-info
+                    .card.mb-3.border-info.h-100
                         .card-body
                             h4.card-title.mb-2.text-muted Details
                             ul.list-group.list-group-flush
@@ -27,10 +27,11 @@ block content
                                 =process.machine_id
                             li.list-group-item Username Created: 
                                 =process.username_created
-                            li.list-group-item Username Updated: 
-                                =process.username_updated
+                            if process.username_updated
+                                li.list-group-item Username Updated: 
+                                    =process.username_updated
                 .col-sm-6
-                    .card.mb-3.border-info
+                    .card.mb-3.border-info.h-100
                         .card-body
                             h4.card-title.mb-2.text-muted Recents
                             ul.list-group.list-group-flush
@@ -41,4 +42,8 @@ block content
                             li.list-group-item Item: 5
             .d-inline-flex.float-left
                 a(href='/process/update/'+process._id).btn.btn-outline-primary.mr-3.btn-lg Edit
-                a(href='/process/delete/'+process._id).btn.btn-outline-danger.mr-3.btn-lg Delete
+                a(data-toggle="modal", data-target="#modal-confirm")#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
+                input#id(type='hidden', name='initialPid', value=`${process._id}`)
+                
+block scripts
+    script(src='/resources/js/process/process.js')

@@ -2,8 +2,8 @@
 //Author - Atharva Joshi
 
 const router = require('express').Router();
-const auth = require('../middleware/auth')
-let Process = require('../models/process.model');
+const auth = require('../erp/middleware/auth')
+let Process = require('../erp/models/process.model');
 
 //To access any route localhost:PORT/route...
 //Note Make sure JSON response contains the same variable name

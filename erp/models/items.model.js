@@ -49,7 +49,10 @@ const itemSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref:'Process'
         },
-        scheduled_date: Date
+        scheduled_date: Date,
+        status: {
+            enum:['approved','delayed','completed']
+        }
         //instructions: String
     }],
     attached_materials: [{

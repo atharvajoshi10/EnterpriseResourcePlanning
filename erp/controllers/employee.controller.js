@@ -2,8 +2,9 @@ const Employee = require('../models/employee.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+//API Controllers
 //Function to signup new employees
-exports.signup = catchAsync(async(req,res,next) => {
+exports.signupApi = catchAsync(async(req,res,next) => {
     const newEmployee = Employee.create(req.body)
     res.status(201).json({
         status: 'success',
@@ -14,7 +15,7 @@ exports.signup = catchAsync(async(req,res,next) => {
 });
 
 //Function to login existing employees
-exports.login = catchAsync(async (req, res, next) =>{
+exports.loginApi = catchAsync(async (req, res, next) =>{
     if(!req.body.e_password||!req.body.e_password){
         return next(new AppError('Please enter email and password', 400));
     }
@@ -26,23 +27,33 @@ exports.login = catchAsync(async (req, res, next) =>{
     if(!token){
         return next(new AppError('Problem encountered while generating token', 500));
     }
-    res.json({employee,token});
+    const cookieOptions = {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 60 * 1000),
+        //secure: true, For  https
+        httpOnly: true
+    };
+    res.cookie('jwt',token,cookieOptions);
+    res.json({status: 'success', employee, token});
 });
 
 //Function to logout existing employees from all devices
-exports.logout = catchAsync(async (req,res,next) =>{
-    req.employee.tokens = []
-    await req.employee.save()
-    res.json('Logged out successfully!')
-});
+exports.logoutApi = (req,res,next) =>{
+    // req.employee.tokens = []
+    // await req.employee.save()
+    res.cookie('jwt','LoggedOut',{
+        expires: new Date(Date.now() + 1*1000),
+        httpOnly: true
+    });
+    res.status(200).json({status:'success'});
+};
 
 //Function to get profile info
-exports.profile = catchAsync(async (req,res,next) =>{
+exports.profileApi = catchAsync(async (req,res,next) =>{
     res.json(req.employee)
 });
 
 //Function to update profile
-exports.updateMe = catchAsync(async (req,res,next) =>{
+exports.updateMeApi = catchAsync(async (req,res,next) =>{
     const updates = Object.keys(req.body)
     updates.forEach((update) => req.employee[update] = req.body[update])
     await req.employee.save()
@@ -50,6 +61,22 @@ exports.updateMe = catchAsync(async (req,res,next) =>{
 });
 
 //Function to delete profile
-exports.deleteMe = catchAsync(async (req,res,next) => {
+exports.deleteMeApi = catchAsync(async (req,res,next) => {
     await Employee.findByIdAndDelete(req.employee._id)
 });
+
+//View Controllers
+//Login
+exports.login = catchAsync(async (req, res, next) => {
+    res.render('login',{
+        title: 'Login'
+    });
+});
+
+//Dashboard
+exports.dashboard = catchAsync(async (req, res, next) => {
+    res.render('dashboard',{
+        title: 'Dashboard'
+    });
+});
+
