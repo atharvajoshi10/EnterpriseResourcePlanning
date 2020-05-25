@@ -23,23 +23,24 @@ exports.getProcessById = catchAsync(async (req,res,next) =>{
     });
 });
 
-exports.updateProcess = catchAsync(async (req,res,next) =>{
-    const process = await Process.findById(req.params.id)
-    if(!process){
-        return next(new AppError('No Process found with that ID',404));
-    }
-    res.render('editprocess',{
-        title: 'Edit Process | ' + process.process_name,
-        process
-    });
-})
+// exports.updateProcess = catchAsync(async (req,res,next) =>{
+//     const process = await Process.findById(req.params.id)
+//     if(!process){
+//         return next(new AppError('No Process found with that ID',404));
+//     }
+//     res.render('editprocess',{
+//         title: 'Edit Process | ' + process.process_name,
+//         process
+//     });
+// })
 
-exports.addProcess = catchAsync(async (req, res, next) => {
-    res.render('createProcess',{
-        title: 'Create new Process'
-    });
-});
+// exports.addProcess = catchAsync(async (req, res, next) => {
+//     res.render('createProcess',{
+//         title: 'Create new Process'
+//     });
+// });
 
+//##########API#########
 exports.updateProcessApi = catchAsync(async (req,res,next) =>{
     const process = await Process.findById(req.params.id);
     if(!process){
@@ -50,6 +51,7 @@ exports.updateProcessApi = catchAsync(async (req,res,next) =>{
     process.description = req.body.description;
     process.worker_id = req.body.worker_id;
     process.machine_id = req.body.machine_id;
+    process.process_thumbnail_location = req.body.process_thumbnail_location;
     process.username_updated=req.employee.e_username;
     await process.save()
     res.json({status:'success'});
@@ -60,8 +62,8 @@ exports.saveNewProcessApi = catchAsync(async (req,res,next) =>{
         ...req.body,
         username_created: req.employee.e_username
     });
-    await newProcess.save()
-    res.json({status:'success'});
+    const process = await newProcess.save()
+    res.json({status:'success',id: process._id});
 });
 
 exports.deleteProcessApi = catchAsync(async(req,res,next) => {
@@ -108,9 +110,9 @@ exports.getImageLocation = catchAsync(async (req,res,next) =>{
     });
 });
 
-exports.saveImageLocation = catchAsync(async (req,res,next) =>{
-    const location = '/img/items/'+req.file.originalname;
-    const item = await Item.findById(req.params.id)
-    item.item_thumbnail_location = location;
-    await item.save()
-});
+// exports.saveImageLocation = catchAsync(async (req,res,next) =>{
+//     const location = '/img/items/'+req.file.originalname;
+//     const item = await Item.findById(req.params.id)
+//     item.item_thumbnail_location = location;
+//     await item.save()
+// });

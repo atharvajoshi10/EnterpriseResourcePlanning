@@ -14,7 +14,7 @@ block content
                         img.card-img(src=`${process.process_thumbnail_location}`, alt='Process image',style='width: 10rem;height:10rem')
                 
             .row.mb-5
-                .col-sm-6
+                .col-sm-6.mb-2
                     .card.mb-3.border-info.h-100
                         .card-body
                             h4.card-title.mb-2.text-muted Details
@@ -30,7 +30,7 @@ block content
                             if process.username_updated
                                 li.list-group-item Username Updated: 
                                     =process.username_updated
-                .col-sm-6
+                .col-sm-6.mb-2
                     .card.mb-3.border-info.h-100
                         .card-body
                             h4.card-title.mb-2.text-muted Recents
@@ -41,9 +41,11 @@ block content
                             li.list-group-item Item: 4
                             li.list-group-item Item: 5
             .d-inline-flex.float-left
-                a(href='/process/update/'+process._id).btn.btn-outline-primary.mr-3.btn-lg Edit
-                a(data-toggle="modal", data-target="#modal-confirm")#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
+                button(type='button', id='edit-btn' name='edit-btn' ,data-toggle='modal', data-target='#editProcess').btn.btn-outline-primary.mr-3.btn-lg Edit
+                button#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
                 input#id(type='hidden', name='initialPid', value=`${process._id}`)
-                
+    include _editProcess    
+            
 block scripts
-    script(src='/resources/js/process/process.js')
+    script(src='/resources/js/process/edit.process.js')
+    script(src='/resources/js/process/delete.process.js')

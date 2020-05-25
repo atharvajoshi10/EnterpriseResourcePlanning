@@ -1,0 +1,46 @@
+#pdfList.modal.fade(tabindex='-1', role='dialog', aria-labelledby='pdfListTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5#pdfListTitle.modal-title Edit Raw Material List
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                table#pdfTable.table.table-hover.mt-2.bg-white
+                    thead
+                    tr.table-info
+                        th(scope='col') Drawing Number
+                        th(scope='col') Revision Number
+                        th(scope='col') Drawing Pdf
+                        th(scope='col') 
+                    tbody
+                        each drawing in item.drawing_list
+                            tr
+                                td=drawing.drawing_number 
+                                td=drawing.drawing_revision_number
+                                td
+                                    a(href=`${drawing.drawing_location}`, target='_blank')
+                                        img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 1.5rem;height:1.5rem')
+                                td.text-center
+                                    a.text-muted(onclick = `deleteDrawing("${drawing._id}")` style='cursor:pointer')
+                                        i.fas.fa-trash-alt.fa-lg
+                                        
+                hr
+                a.text-muted#add-new-drawing(data-toggle="collapse" href="#pdf-form" role="button" aria-expanded="false" aria-controls="pdf-form" style='text-decoration: none')
+                    i.fas.fa-plus-circle.fa-lg.mr-2
+                    |   Add New Drawing
+                hr              
+                form#pdf-form.collapse.multi-collapse
+                    .row
+                        .col-8
+                            .form-group
+                                .custom-file
+                                    label.custom-file-label(for='addformControlPdf') Add another drawing?
+                                    input#addformControlPdf.custom-file-input(type='file' required)    
+                        .col-4
+                            .form-group
+                                input#add-drawing-number.form-control(type='text', autocomplete='off', placeholder='Enter Drawing Number' required)
+                    .form-group
+                        button.btn.btn-primary(type="submit") Add
+            .modal-footer
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close

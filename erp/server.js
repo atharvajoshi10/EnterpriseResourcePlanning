@@ -47,7 +47,7 @@ app.use(helmet());
 
 //Middleware to for rate limiting
 const limiter = rateLimit({
-    max: 200,
+    max: 1000,
     windowMs: 60*60*1000,
     message: 'Too many requests from this IP, please try again in an hour'
 });
@@ -87,7 +87,8 @@ app.set('view engine','pug');
 app.set('views',viewPath);
 
 //Importing routes created for views
-const viewRouter = require('./routes/view.routes');
+const itemsRouter = require('./routes/items.routes');
+const raw_materialRouter = require('./routes/raw_material.routes');
 const processRouter = require('./routes/process.routes');
 const employeeRouter = require('./routes/employee.routes');
 //const adminRouter = require('./routes/admin.routes');
@@ -100,8 +101,9 @@ app.get('/', function(req, res) {
 });
 
 //View Routes
-app.use('/',viewRouter);
+app.use('/items',itemsRouter);
 app.use('/process',processRouter);
+app.use('/raw_material',raw_materialRouter);
 app.use('/employee',employeeRouter);
 //app.use('/admin/',adminRouter);
 

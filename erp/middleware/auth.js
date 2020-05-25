@@ -12,7 +12,7 @@ const auth = catchAsync(async (req,res,next) => {
     }
     const decoded = jwt.verify(token,process.env.JWT_SECRET)
     //Find user with the correct username who has that authentication token still stored
-    const employee = await Employee.findOne({e_username:decoded.e_username}); //, 'tokens.token':token}
+    const employee = await Employee.findOne({e_username:decoded.e_username});
     if(!employee){
         return next(new AppError('Token belonging to this user no longer exist!',401));
     }

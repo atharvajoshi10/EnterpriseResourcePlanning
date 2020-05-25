@@ -1,16 +1,16 @@
 var host = 'http://localhost:5000';
 const id = document.getElementById('id').value;
 
-const deleteProcess = async (id) => {
+const deleteRawMaterial = async (id) => {
     try{
         const res = await axios({
             method: 'DELETE',
-            url: `${host}/process/api/delete/${id}`
+            url: `${host}/raw_material/api/delete/${id}`
         });
         if(res.data.status = 'success'){
-            showAlert('success', 'Process deleted successfully');
+            showAlert('success', 'Raw Material deleted successfully');
             window.setTimeout(() => {
-                location.assign('/process')
+                location.assign('/raw_material')
             }, 1500);
         }
     }catch(err){
@@ -27,7 +27,8 @@ $(document).ready(function(){
             keyboard: false
         })
         .on('click', '#confirm', function(e) {
-            deleteProcess(id);
+            $('#modal-confirm').modal('hide');
+            deleteRawMaterial(id);
         });
     });
 });

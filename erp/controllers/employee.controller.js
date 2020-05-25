@@ -37,9 +37,7 @@ exports.loginApi = catchAsync(async (req, res, next) =>{
 });
 
 //Function to logout existing employees from all devices
-exports.logoutApi = (req,res,next) =>{
-    // req.employee.tokens = []
-    // await req.employee.save()
+exports.logoutApi = async (req,res,next) =>{
     res.cookie('jwt','LoggedOut',{
         expires: new Date(Date.now() + 1*1000),
         httpOnly: true

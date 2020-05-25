@@ -1,4 +1,4 @@
-extends base
+extends ../base
 
 block content
     button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
@@ -45,5 +45,11 @@ block content
                             li.list-group-item Raw Material: 4
                             li.list-group-item Raw Material: 5
             .d-inline-flex.float-left.mt-5
-                a(href='/raw_material/update/'+raw_material._id).btn.btn-outline-primary.mr-3.btn-lg Edit
-                a(href='/raw_material/delete/'+raw_material._id).btn.btn-outline-danger.mr-3.btn-lg Delete
+                button(type='button', id='edit-btn' name='edit-btn' ,data-toggle='modal', data-target='#editRawMaterial').btn.btn-outline-primary.mr-3.btn-lg Edit
+                a#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
+                input#id(type='hidden', name='initialPid', value=`${raw_material._id}`)
+    include _editRawMaterial
+
+block scripts
+    script(src='/resources/js/raw_material/edit.raw_material.js')
+    script(src='/resources/js/raw_material/delete.raw_material.js')

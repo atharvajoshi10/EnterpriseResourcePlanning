@@ -1,6 +1,7 @@
 extends ../base
 
 block content
+    button(type='button', id='create-btn' name='create-btn' ,data-toggle='modal', data-target='#createRawMaterial').btn.btn-info.mt-3.mb-5.mr-5.btn-lg.float-right Create new Raw Material
     .container
         table.table.table-hover.mt-5.bg-white
             thead
@@ -17,7 +18,10 @@ block content
                         i.fas.fa-hammer.fa-lg.mr-3   
                         =raw_material.raw_material_name 
                     td=raw_material.raw_material_id
-                    td=process.createdAt.toLocaleString()
+                    td=raw_material.createdAt.toLocaleString()
                     td.text-center
                         a(href='/raw_material/'+raw_material._id)
-                            i.fas.fa-long-arrow-alt-right.fa-2x
+                            i.fas.fa-share.fa-2x
+    include _createRawMaterial
+block scripts
+    script(src='/resources/js/raw_material/create.raw_material.js')

@@ -1,5 +1,7 @@
 //Import Statements to load the models
 let Item = require('../models/items.model');
+let Process = require('../models/process.model');
+let Raw_material = require('../models/raw_material.model');
 const multer = require('multer');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -7,9 +9,13 @@ const AppError = require('../utils/appError');
 //Controller to get all Items from database
 exports.getItems = catchAsync(async (req,res,next) => {
     const items = await Item.find().sort('-createdAt');
+    const processes = await Process.find().sort('-createdAt');
+    const raw_materials = await Raw_material.find().sort('-createdAt');
     res.render('itemsList',{
         title: 'Items',
-        items
+        items,
+        processes,
+        raw_materials
     });
 });
 
@@ -18,15 +24,116 @@ exports.getItemById = catchAsync(async (req,res,next) =>{
     const item = await Item.findById(req.params.id)
     .populate('process_list.process')
     .populate('attached_materials.material')
+    const processList = await Process.find().sort('-createdAt');
+    const materialList = await Raw_material.find().sort('-createdAt');
     if(!item){
         return next(new AppError('No Item found with that ID',404));
     }
     res.render('items',{
         title: 'Item | ' + item.item_name,
-        item
+        item,
+        processList,
+        materialList
     });
 });
 
+// exports.updateItem = catchAsync(async (req,res,next) =>{
+//     const item = await Item.findById(req.params.id)
+//     if(!item){
+//         return next(new AppError('No Process found with that ID',404));
+//     }
+//     res.render('editItem',{
+//         title: 'Edit Item | ' + item.item_name,
+//         item
+//     });
+// })
+
+// exports.addItem = catchAsync(async (req, res, next) => {
+//     res.render('createItem',{
+//         title: 'Create new Item',
+//         processes,
+//         raw_materials
+//     });
+// });
+
+//API
+exports.sortProcessList = catchAsync(async (req,res,next) => {
+    const item = await Item.findById(req.params.id).select('process_list');
+    const start = req.body.start;
+    const end = req.body.end;
+    item.process_list.splice(end,0,item.process_list.splice(start,1)[0]);
+    await item.save();
+});
+
+exports.updateProcessListApi = catchAsync(async (req,res,next) => {
+    const item = await Item.updateOne({_id: req.params.id, 'process_list.process': req.body.Id}, {'$set': {
+        'process_list.$.scheduled_date': req.body.date,
+        'process_list.$.status': req.body.status
+    }});
+    console.log(item)
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'});
+});
+
+exports.appendProcessApi = catchAsync(async (req,res,next) => {
+    const item = await Item.updateOne({_id: req.params.id}, {$push: {'process_list': {$each: req.body.process_list}}});
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'});
+});
+
+exports.updateProcessApi = catchAsync(async (req,res,next) => {
+    const item = await Item.updateOne({_id: req.params.id, 'process_list.process': req.body.oldId}, {'$set': {
+        'process_list.$.process': req.body.newId
+    }});
+    console.log(item)
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'});
+})
+
+exports.removeProcessApi = catchAsync(async(req,res,next) => {
+    const item = await Item.updateOne({ _id: req.params.id }, { "$pull": { "process_list": { "process": req.body.process_id } }}, { safe: true});
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'})
+});
+
+exports.updateItemApi = catchAsync(async (req,res,next) =>{
+    const item = await Item.findById(req.params.id);
+    if(!item){
+        return next(new AppError('No Process found with that ID',404));
+    }
+    item.item_name = req.body.item_name;
+    item.item_id = req.body.item_id;
+    item.description = req.body.description;
+    item.item_thumbnail_location = req.body.item_thumbnail_location;
+    item.username_updated=req.employee.e_username;
+    await item.save()
+    res.json({status:'success'});
+});
+
+exports.addItemApi = catchAsync(async (req,res,next) =>{
+    const newItem = new Item({
+        ...req.body,
+        username_created: req.employee.e_username
+    });
+    await newItem.save();
+    res.json({status:'success'});
+});
+
+exports.deleteItemApi = catchAsync(async(req,res,next) => {
+    const item = await Item.findByIdAndDelete(req.params.id)
+    if(!item){
+        return next(new AppError('No Process found with that ID',404));
+    }
+    res.json({status:'success'});
+});
 
 /*##########PDF Upload Controllers###########*/
 
@@ -42,8 +149,8 @@ const multerStorage = multer.diskStorage({
 
 const multerFilter = (req,file,cb) => {
     //PDF FILES FILTERING
-    if(!file.originalname.endsWith('.pdf')){
-        return cb(new Error('Please upload a pdf file'),false)
+    if(!file.originalname.endsWith('pdf')){
+        cb(new AppError('Please upload a pdf file',400),false)
     }
     cb(null, true)
 }
@@ -60,26 +167,34 @@ upload = multer({
 exports.uploadDrawingPdf = upload.single('drawing');
 
 //Controller to save pdf location to database
-exports.saveDrawingLocation =catchAsync( async (req,res,next) =>{
+exports.getDrawingLocation =catchAsync( async (req,res,next) =>{
     const location = '/drawings/'+req.file.originalname;
-    const item = await Item.findById(req.params.id)
-    item.drawing_location = location;
-    item.drawing_revision_number = item.drawing_revision_number+1;
-    await item.save()
-    res.json(item)
+    res.json({
+        status:'success',
+        location: location
+    });
 });
 
 //Controller to remove pdf location from Database
 exports.deleteDrawingLocation = catchAsync(async (req,res,next) =>{
-    const item = await Item.findById(req.params.id)
-    item.drawing_location = undefined;
-    await item.save()
-    res.json(item)
+    const item = await Item.updateOne({ _id: req.params.id }, { "$pull": { "drawing_list": { "_id": req.body.drawing_id } }}, { safe: true});
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'})
+});
+
+exports.saveDrawingLocation = catchAsync(async (req,res,next) =>{
+    const item = await Item.updateOne({_id: req.params.id},{"$push": {"drawing_list": req.body.obj}});
+    if(!item){
+        return next(new AppError('No Item found with that ID',404));
+    }
+    res.json({status:'success'})
 });
 
 
-/*##########Image Upload Controllers###########*/
 
+/*##########Image Upload Controllers###########*/
 const multerImgStorage = multer.diskStorage({
     destination: (req,file,cb) =>{
         cb(null,'public/img/items');
@@ -91,8 +206,8 @@ const multerImgStorage = multer.diskStorage({
 
 const multerImgFilter = (req,file,cb) => {
     //Image FILES FILTERING
-    if(!file.originalname.match(/\.(jpg|png|jpeg)$/)){
-        cb(new Error('Please upload an image!'), false)
+    if(!file.mimetype.startsWith('image')){
+        cb(new AppError('Please upload an image!',400), false);
     }
     cb(null, true)
 }
@@ -105,11 +220,12 @@ uploadImg = multer({
     fileFilter: multerImgFilter
 });
 
-exports.uploadItemsImage = uploadImg.single('thumbnail');
-exports.saveImageLocation = catchAsync(async (req,res,next) =>{
+exports.uploadImage = uploadImg.single('thumbnail');
+exports.getImageLocation = catchAsync(async (req,res,next) =>{
     const location = '/img/items/'+req.file.originalname;
-    const item = await Item.findById(req.params.id)
-    item.item_thumbnail_location = location;
-    await item.save()
-    res.json(item)
+    res.json({
+        status:'success',
+        location: location
+    });
 });
+

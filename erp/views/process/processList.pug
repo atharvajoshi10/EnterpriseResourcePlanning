@@ -1,7 +1,7 @@
 extends ../base
 
 block content
-    a.btn.btn-info.mt-3.mb-5.mr-5.btn-lg.float-right(href='/process/add') Create new Process
+    button.btn.btn-info.mt-3.mb-5.mr-5.btn-lg.float-right(type='button', id='create-btn' ,name='create-btn' ,data-toggle='modal', data-target='#createProcess') Create new Process
     .container
         table.table.table-hover.mt-5.bg-white
             thead
@@ -22,3 +22,8 @@ block content
                     td.text-center
                         a(href='/process/'+process._id)
                             i.fas.fa-share.fa-2x
+    include _createProcess
+
+
+block scripts
+    script(src='/resources/js/process/create.process.js')

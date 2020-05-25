@@ -21,6 +21,7 @@ const add = async (name,pid,description,workerId,machineId,location=undefined) =
         }, 1500);
     }
     }catch(err){
+        $('#createProcess').modal('hide');
         showAlert('danger', err.response.data.message);
     }
 };
@@ -36,6 +37,7 @@ const uploadImage = async (data) =>{
             return res.data.location;
         }
     }catch(err){
+        $('#createProcess').modal('hide');
         showAlert('danger', err.response.data.message);
     }
 }
@@ -43,6 +45,7 @@ const uploadImage = async (data) =>{
 if(createForm){
     createForm.addEventListener('submit', e =>{
         e.preventDefault();
+        $('#createProcess').modal('hide');
         const name = document.getElementById('name').value;
         const pid = document.getElementById('pid').value;
         const description = document.getElementById('description').value;

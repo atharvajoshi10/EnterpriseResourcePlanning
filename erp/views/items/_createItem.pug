@@ -1,0 +1,65 @@
+#createItem.modal.fade(tabindex='-1', role='dialog', aria-labelledby='createItemTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h2#createItemTitle.modal-title Create Item
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                ul.nav.nav-tabs(role="tablist")
+                    li.nav-item
+                        a.nav-link.active(data-toggle='tab', href='#item-details', role="tab" ,aria-controls="item-details" ,aria-selected="true") Details
+                    li.nav-item
+                        a.nav-link(data-toggle='tab', href='#process-details', role="tab", aria-controls="process-details" aria-selected="false") Process List
+                    li.nav-item
+                        a.nav-link(data-toggle='tab', href='#raw_material-details' aria-controls="raw_material-details" aria-selected="false") Raw Material List
+                .tab-content
+                    #item-details.tab-pane.fade.in.active.show
+                        form.form#create-item
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='name') Item Name
+                                input#name.form-control.form-control-lg(type='name', autocomplete='off', placeholder='Enter Item name', required)
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='id') Item Id
+                                input#iid.form-control.form-control-lg(type='text', placeholder='Enter Item Id', required)
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='description') Description
+                                textarea#description.form-control.form-control-lg(type='text', placeholder='Item Description', rows="3", required)
+                            .form-group
+                                .custom-file
+                                    label.custom-file-label(for='thumbnail') Item Thumbnail
+                                    input#thumbnail.custom-file-input(type='file', accept='image/*', name='thumbnail' required)
+                            .form-group
+                                .row
+                                    .col-8
+                                        .custom-file
+                                            label.custom-file-label(for='drawing') Item Drawing
+                                            input#drawing.custom-file-input(type='file' required)  
+                                    .col-4
+                                        input#drawing-number.form-control(type='text', autocomplete='off', placeholder='Enter Drawing Number' required)
+                                
+
+                    #process-details.tab-pane.fade
+                        .form-group
+                            label.col-form-label.col-form-label-lg(for='processPicker') Select Associated Processes
+                            select.selectpicker.form-control(multiple data-live-search="true")#processPicker
+                                each process in processes
+                                    option(value=`${process._id}`)=process.process_name
+                        table.table.table-hover.mt-2.bg-white#process-table
+                            thead
+                            tbody
+
+                    #raw_material-details.tab-pane.fade                       
+                        .form-group
+                            label.col-form-label.col-form-label-lg(for='rawMaterialPicker') Select Associated Raw Material
+                            select.selectpicker.form-control(multiple data-live-search="true")#rawMaterialPicker
+                                each material in raw_materials
+                                    option(value=`${material._id}`)=material.raw_material_name
+                        table.table.table-hover.mt-2.bg-white#raw_material-table
+                            thead
+                            tbody
+            .modal-footer
+                .form-group
+                    .input-group
+                        input.btn.btn-primary.btn-lg(type='submit', name='submit', form='create-item', value='Save Item').mb-2.mr-3#add
+                        input.btn.btn-primary.btn-lg(type='reset', name='reset', form='create-item', value='Reset' onclick='resetForm()').mb-2

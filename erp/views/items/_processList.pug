@@ -1,0 +1,75 @@
+#processList.modal.fade(tabindex='-1', role='dialog', aria-labelledby='processListTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5#processListTitle.modal-title Edit Process List
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                ul.nav.nav-tabs(role="tablist")
+                    li.nav-item
+                        a.nav-link.active(data-toggle='tab', href='#edit-processList', role="tab" ,aria-controls="edit-processList" ,aria-selected="true") Edit List
+                    li.nav-item
+                        a.nav-link(data-toggle='tab', href='#add-processList', role="tab", aria-controls="add-processList" aria-selected="false") Add Process
+                .tab-content
+                    #edit-processList.tab-pane.fade.in.active.show
+                        table.table.table-hover.mt-2.bg-white
+                            thead
+                            tr.table-info
+                                th(scope='col')
+                                th(scope='col') Process Name 
+                                th(scope='col') Scheduled Date
+                                th(scope='col') Status
+                                th(scope='col')
+                            tbody#sortable
+                                each processes in item.process_list
+                                    tr
+                                        td  
+                                            a.text-muted#singleProcess-update(style='text-decoration: none; cursor:pointer' onclick=`setProcessUpdateForm(${JSON.stringify(processes)})`)
+                                                i.fas.fa-edit.fa-lg
+                                        td
+                                            a.mr-5(id='editProcess-btn',role="button", name='editProcess-btn' ,data-toggle='modal', data-target='#editProcess' ,onclick=`editProcess(${JSON.stringify(processes.process)})` style='cursor:pointer')=processes.process.process_name
+                                        td
+                                            span.mr-5=processes.scheduled_date.toDateString()
+                                        td
+                                            case `${processes.status}`
+                                                when "approved"
+                                                    span.badge.badge-pill.badge-info Approved
+                                                when "delayed"
+                                                    span.badge.badge-pill.badge-warning Delayed
+                                                when "completed"
+                                                    span.badge.badge-pill.badge-success Completed
+                                        td.text-center
+                                            a.text-muted(href='#' onclick=`deleteProcess("${processes.process._id}")`)
+                                                i.fas.fa-trash-alt.fa-lg
+                        hr
+                        form#singleProcess-updateForm
+                            .form-group
+                                label(for='disabled-process-name') Process
+                                input#disabled-process-name.form-control(type='text', placeholder='Process' disabled) 
+                            .form-group
+                                label.col-form-label.col-form-label-sm(for='scheduled-date') Scheduled Date
+                                input#scheduled-date.form-control.form-control-sm(type="date")
+                            .form-group
+                                label.col-form-label.col-form-label-sm(for='status') Status
+                                select#status.form-control.form-control-sm
+                                    option(value='approved').status-option Approved
+                                    option(value='completed').status-option Completed
+                                    option(value='delayed').status-option Delayed
+                            .form-group
+                                input#hidden-process-Id(type='hidden', name='hidden-process-Id')
+                                input#singleProcess-updateBtn.btn.btn-sm.btn-primary.mt-3(type='submit', value='Update')
+                                
+                    #add-processList.tab-pane.fade
+                        .form-group
+                            label.col-form-label.col-form-label-lg(for='processPicker') Select Associated Processes
+                            select.selectpicker.form-control(multiple data-live-search="true")#processPicker
+                                each process in processList
+                                    option(value=`${process._id}`)=process.process_name
+                        table.table.table-hover.mt-2.bg-white#process-table
+                            thead
+                            tbody
+                        input.btn.btn-primary.btn-lg#list-process.mt-3(type='button', value='Done' onclick ='createProcessList()')
+            .modal-footer
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+include _editProcess

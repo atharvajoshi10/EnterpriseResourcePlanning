@@ -15,8 +15,8 @@ router.post('/api/uploadImage', auth, processController.uploadImage, processCont
 
 //Process View Routes
 router.get('/', auth, processController.getProcesses);
-router.get('/add',auth, processController.addProcess);
+// router.get('/add',auth, processController.addProcess);
 router.get('/:id',auth, processController.getProcessById);
-router.get('/update/:id',auth, processController.updateProcess);
+// router.get('/update/:id',auth, processController.updateProcess);
 
 module.exports = router;

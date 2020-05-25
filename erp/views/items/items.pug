@@ -7,6 +7,7 @@ html
         integrity='sha384-bWm7zrSUE5E+21rA9qdH5frkMpXvqjQm/WJw4L5PYQLNHrywI5zs5saEjIcCdGu1' crossorigin='anonymous')
         link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.5.0/css/all.css', 
         integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU', crossorigin='anonymous')
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css")
         title #{title}
         style.
             body{
@@ -61,14 +62,14 @@ html
                             .card-body
                                 .d-inline-flex.mb-2.w-100.justify-content-between
                                     h4.card-title.text-muted Process List
-                                    button.btn.btn-info(type='button', id='editProcessList' name='editProcessList') Edit
+                                    button.btn.btn-info(type='button', id='editProcessList' ,name='editProcessList' ,data-toggle='modal', data-target='#processList') Edit
                                 table.table.table-hover.mt-2.bg-white
                                     thead
                                     tr.table-info
                                         th(scope='col') Process Name 
                                         th(scope='col') Scheduled Date
                                         th(scope='col') Status
-                                    tbody#sortable
+                                    tbody
                                         each processes in item.process_list
                                             tr
                                                 td
@@ -89,7 +90,7 @@ html
                             .card-body
                                 .d-inline-flex.mb-2.w-100.justify-content-between
                                     h4.card-title.text-muted Raw Material List
-                                    button.btn.btn-info(type='button', id='editProcessList' name='editProcessList') Edit
+                                    button.btn.btn-info(type='button', id='editRawMaterialList' name='editRawMaterialList' ,data-toggle='modal', data-target='#rawMaterialList') Edit
                                 table.table.table-hover.mt-2.bg-white
                                     thead
                                     tr.table-info
@@ -106,7 +107,9 @@ html
                     .col-sm-6
                         .card
                             .card-body
-                                h4.card-title.mb-2.text-muted Drawing
+                                .d-inline-flex.mb-2.w-100.justify-content-between
+                                    h4.card-title.mb-2.text-muted Drawing
+                                    button.btn.btn-info(type='button', id='editPdfList' name='editPdfList' ,data-toggle='modal', data-target='#pdfList') Edit
                                 table.table.table-hover.mt-3.bg-white
                                     thead
                                     tr.table-info
@@ -114,23 +117,33 @@ html
                                         th(scope='col') Revision Number
                                         th(scope='col') Drawing pdf
                                     tbody
-                                        tr
-                                            td=item.drawing_number 
-                                            td=item.drawing_revision_number
-                                            td.text-center
-                                                a(href=`${item.drawing_location}`, target='_blank')
-                                                    img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 1.5rem;height:1.5rem')  
+                                        each drawing in item.drawing_list
+                                            tr
+                                                td=drawing.drawing_number 
+                                                td=drawing.drawing_revision_number
+                                                td.text-center
+                                                    a(href=`${drawing.drawing_location}`, target='_blank')
+                                                        img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 1.5rem;height:1.5rem')  
                                             
                     .col-sm-6.align-items-end
                         .d-inline-flex.float-right.mt-5
-                            a(href='/items/update/'+item._id).btn.btn-outline-primary.mr-3.btn-lg Edit
-                            a(href='/items/delete/'+item._id).btn.btn-outline-danger.mr-3.btn-lg Delete
-                            
-                    
-
+                            button(type='button', id='editBtn' name='editBtn' ,data-toggle='modal', data-target='#editItem').btn.btn-outline-primary.mr-3.btn-lg Edit
+                            a#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
+                            input#Id(type='hidden', name='initialIid', value=`${item._id}`)
+        include _editItem
+        include _processList
+        include _rawMaterialList
+        include _pdfList                  
         script(src='https://code.jquery.com/jquery-1.12.4.js')
         script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
-        script(src='/resources/js/items/sortable.js')
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js')
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js")
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js')
+        script(src='/resources/js/items/sort.items.js')
         script(src='/resources/js/alert.js')
         script(src='/resources/js/logout.js')
+        script(src='/resources/js/items/delete.item.js')
+        script(src='/resources/js/items/edit.item.js')
+        script(src='/resources/js/items/pdf.item.js')
+        script(src='/resources/js/items/processList.item.js')
+        script(src="/resources/js/items/editProcess.item.js")

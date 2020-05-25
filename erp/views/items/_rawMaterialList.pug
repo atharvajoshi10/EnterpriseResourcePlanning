@@ -1,0 +1,61 @@
+#rawMaterialList.modal.fade(tabindex='-1', role='dialog', aria-labelledby='rawMaterialListTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5#rawMaterialListTitle.modal-title Edit Raw Material List
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                ul.nav.nav-tabs(role="tablist")
+                    li.nav-item
+                        a.nav-link.active(data-toggle='tab', href='#edit-materialList', role="tab" ,aria-controls="edit-materialList" ,aria-selected="true") Edit List
+                    li.nav-item
+                        a.nav-link(data-toggle='tab', href='#add-materialList', role="tab", aria-controls="add-materialList" aria-selected="false") Add Raw Material
+                .tab-content
+                    #edit-materialList.tab-pane.fade.in.active.show
+                        table.table.table-hover.mt-2.bg-white
+                            thead
+                            tr.table-info
+                                th(scope='col') 
+                                th(scope='col') Raw Material Name 
+                                th(scope='col') Quantity
+                                th(scope='col')
+                            tbody
+                                tbody
+                                    each materials in item.attached_materials
+                                        tr
+                                            td  
+                                                a.text-muted#sinlgeMaterialList-update(style='text-decoration: none; cursor:pointer' onclick=`setMaterialUpdateForm(${JSON.stringify(materials)})`)
+                                                    i.fas.fa-edit.fa-lg
+                                            td
+                                                a(href='/raw_material/'+materials.material._id)=materials.material.raw_material_name
+                                            td
+                                                span.mr-5=materials.quantity
+                                            td
+                                                a(href='').text-muted
+                                                    i.fas.fa-trash-alt.fa-lg
+                        hr
+                        form#singleMaterial-updateForm
+                            .form-group
+                                label(for='disabled-material-name') Raw Material
+                                input#disabled-material-name.form-control(type='text', placeholder='Raw Material' disabled) 
+                            .form-group
+                                label.col-form-label.col-form-label-sm(for='quantity') Quantity
+                                input#quantity.form-control.form-control-sm(type="number")
+                            .form-group
+                                input#hidden-material-Id(type='hidden', name='hidden-material-Id')
+                                input#singleMaterial-updateBtn.btn.btn-sm.btn-primary.mt-3(type='submit', value='Update')
+                                
+                    #add-materialList.tab-pane.fade
+                        .form-group
+                            label.col-form-label.col-form-label-lg(for='materialPicker') Select Associated Raw Materials
+                            select.selectpicker.form-control(multiple data-live-search="true")#materialPicker
+                                each material in materialList
+                                    option(value=`${material._id}`)=material.raw_material_name
+                        table.table.table-hover.mt-2.bg-white#material-table
+                            thead
+                            tbody
+                        input.btn.btn-primary.btn-lg#list-material.mt-3(type='button', value='Done' onclick ='')
+            .modal-footer
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+include _editRawMaterial

@@ -1,0 +1,48 @@
+#createRawMaterial.modal.fade(tabindex='-1', role='dialog', aria-labelledby='createRawMaterialTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h2#createRawMaterialTitle.modal-title Create Raw Material 
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                form.form#create-raw_material
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='name') Material Name
+                        input#name.form-control.form-control-lg(type='name', autocomplete='off', placeholder='Enter Material name', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='id') Material Id
+                        input#mid.form-control.form-control-lg(type='text', placeholder='Enter Material Id', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='description') Description
+                        textarea#description.form-control.form-control-lg(type='text', placeholder='Material Description', rows="3", required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='category') Category
+                        #category
+                            .form-check.form-check-inline
+                                input#category1.form-check-input(type='checkbox', name='category1', value='Raw', checked=true)
+                                label.form-check-label(for='category1') Raw
+                            .form-check.form-check-inline
+                                input#category2.form-check-input(type='checkbox', name='category2', value='Consumable')
+                                label.form-check-label(for='category2') Consumable
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='quantity') Quantity
+                        input#quantity.form-control.form-control-lg(type='number', placeholder='Enter Quantity', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='measurement') Measurement
+                        input#measurement.form-control.form-control-lg(type='text', placeholder='Enter Measurement', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='unit') Unit
+                        select#unit.form-control.form-control-lg
+                            option(value='Weight').unit Weight
+                            option(value='Metrics').unit Metrics
+                            option(value='Volume').unit Volume
+                            option(value='Quantity').unit Quantity
+                    .form-group
+                        label(for='thumbnail')  Raw Material Thumbnail Image
+                        input#thumbnail.form-control-file(type='file', accept='image/*', name='thumbnail')
+            .modal-footer
+                .form-group
+                    .input-group
+                        input.btn.btn-primary.btn-lg(type='submit', name='submit', form='create-raw_material', value='Save Raw Material').mb-2.mr-3#add
+                        input.btn.btn-primary.btn-lg(type='reset', name='reset',form='create-raw_material',  value='Reset').mb-2

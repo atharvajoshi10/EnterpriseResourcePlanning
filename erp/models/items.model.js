@@ -32,18 +32,19 @@ const itemSchema = new Schema({
         required: [true,'Item id must be specified!']
     },
     description: String,
-    drawing_number:{
-        type: String,
-        trim:true
-    },
-    drawing_location: {
-        type:String,
-        default: '/drawings/sample-pdf-file.pdf'
-    },
-    drawing_revision_number:{
-        type:Number,
-        default:-1
-    },
+    drawing_list: [{
+        drawing_location: {
+            type:String,
+        },
+        drawing_number:{
+            type: String,
+            trim:true
+        },
+        drawing_revision_number:{
+            type:Number,
+            default:0
+        }
+    }],
     process_list: [{
         process: {
             type: mongoose.Schema.Types.ObjectId,
@@ -51,7 +52,8 @@ const itemSchema = new Schema({
         },
         scheduled_date: Date,
         status: {
-            enum:['approved','delayed','completed']
+            type:String,
+            default: 'Approved'
         }
         //instructions: String
     }],
