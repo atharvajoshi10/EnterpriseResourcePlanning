@@ -15,7 +15,6 @@ if(pdfForm){
         $('#pdfList').modal('hide');
         e.preventDefault();
         let revision_number = getRevisionNumber();
-        alert(revision_number)
         const drawing = document.getElementById('addformControlPdf');
         const drawing_number = document.getElementById('add-drawing-number').value;
         const form = new FormData();

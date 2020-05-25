@@ -1,3 +1,9 @@
+$('#processList').on('hidden.bs.modal', function () {
+    if(flag){
+        window.location.reload(true);
+    }
+});
+
 $('#processPicker').selectpicker();
 let selectedProcess;
 let selectedProcessId;
@@ -25,7 +31,7 @@ function createProcessTable(selectedProcess) {
             $("#process-table tbody").append(
                 `<tr> 
                 <td id = ${selectedProcessId[i]}>${selectedProcess[i]}</td>
-                <td><input class="form-control form-control-sm" type="date"></td>
+                <td><input class="form-control form-control-sm" type="date" required></td>
                 <td>Approved</td>
                 </tr>`
             );
@@ -34,6 +40,7 @@ function createProcessTable(selectedProcess) {
 }
 
 const createProcessList = () =>{
+    flag=false;
     $('#processList').modal('hide');
     let process_list = new Array();
     $("#process-table tbody tr").each(function () {
@@ -91,6 +98,7 @@ const deleteProcessApi = async (id) =>{
 
 
 const deleteProcess = async (id) => {
+    flag=false;
     $('#processList').modal('hide');
     showConfirm('Are you sure you want to permanently delete the selected item?');
     $('#modal-confirm').modal({
@@ -137,6 +145,7 @@ const singleProcess_UpdateForm = document.getElementById('singleProcess-updateFo
 if(singleProcess_UpdateForm){
     singleProcess_UpdateForm.addEventListener('submit', e =>{
         e.preventDefault();
+        flag=false;
         $('#processList').modal('hide');
         showConfirm('Are you sure you want to permanently update the selected item?');
         $('#modal-confirm').modal({

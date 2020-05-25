@@ -129,6 +129,7 @@ const updateProcess = async (btn) =>{
 if(process_updateForm){
     process_updateForm.addEventListener('submit', e =>{
         e.preventDefault();
+        flag=false;
         $('#processList').modal('hide');
         $('#editProcess').modal('hide');
         const process_btn = this.document.activeElement.getAttribute("id");

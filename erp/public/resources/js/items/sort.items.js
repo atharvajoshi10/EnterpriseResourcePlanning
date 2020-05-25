@@ -1,3 +1,4 @@
+let flag = false;
 const sortable = () => {
     var start = -1;
     var end = -1;
@@ -14,6 +15,7 @@ const sortable = () => {
 };
 
 const sort = async(start,end) => {
+    flag=true;
     const Id = document.getElementById('Id').value;
     const res = await axios({
         method: 'PATCH',
