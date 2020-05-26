@@ -48,8 +48,8 @@ const processSchema = new Schema({
     }
 },{
     timestamps: true
-})
+});
 
 //Necesarry Export statement, Do not Change
 const Process = mongoose.model('Process', processSchema);
-module.exports = Process
+module.exports = Process;
