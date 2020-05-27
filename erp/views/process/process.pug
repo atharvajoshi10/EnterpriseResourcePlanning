@@ -41,11 +41,11 @@ block content
                             li.list-group-item Item: 4
                             li.list-group-item Item: 5
             .d-inline-flex.float-left
-                button(type='button', id='edit-btn' name='edit-btn' ,data-toggle='modal', data-target='#editProcess').btn.btn-outline-primary.mr-3.btn-lg Edit
-                button#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
-                input#id(type='hidden', name='initialPid', value=`${process._id}`)
-    include _editProcess    
+                button#update-process-btn(type='button', name='edit-btn' ,data-toggle='modal', data-target='#update-process-modal', onclick=`setUpdateProcessForm(${JSON.stringify(process)})`).btn.btn-outline-primary.mr-3.btn-lg Update
+                button#delete-process-btn.btn.btn-outline-danger.mr-3.btn-lg Delete
+                input#process-Id(type='hidden', name='process-Id', value=`${process._id}`)
+    include _updateProcess    
             
 block scripts
-    script(src='/resources/js/process/edit.process.js')
+    script(src='/resources/js/process/update.process.js')
     script(src='/resources/js/process/delete.process.js')
