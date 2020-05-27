@@ -1,11 +1,8 @@
-var host = 'http://localhost:5000';
-const id = document.getElementById('id').value;
-
-const deleteProcess = async (id) => {
+const deleteProcessApi = async (processId) => {
     try{
         const res = await axios({
             method: 'DELETE',
-            url: `${host}/process/api/delete/${id}`
+            url: `${host}/process/api/delete/${processId}`
         });
         if(res.data.status = 'success'){
             showAlert('success', 'Process deleted successfully');
@@ -19,7 +16,7 @@ const deleteProcess = async (id) => {
 };
 
 $(document).ready(function(){
-    $("#delete").click(function(e){
+    $("#delete-process-btn").click(function(e){
         e.preventDefault();
         showConfirm('Are you sure you want to permanently delete the selected item?');
         $('#modal-confirm').modal({
@@ -28,7 +25,8 @@ $(document).ready(function(){
         })
         .on('click', '#confirm', function(e) {
             $('#modal-confirm').modal('hide');
-            deleteProcess(id);
+            const processId = document.getElementById('process-Id').value;
+            deleteProcessApi(processId);
         });
     });
 });
