@@ -38,18 +38,34 @@ module.exports = (err,req,res,next) => {
     //Operational Error: Send to Client
     if(err.isOperational){
         console.error(err);
-        return res.status(err.statusCode).render('error',{
-            title: 'Something went wrong!',
-            msg: err.message,
-            statusCode: err.statusCode
-        });
+        if(req.originalUrl.includes('/api')){
+            res.status(err.statusCode).json({
+                title: 'Something went wrong!',
+                message: err.message,
+                statusCode: err.statusCode
+            });
+        }else{
+            return res.status(err.statusCode).render('error',{
+                title: 'Something went wrong!',
+                msg: err.message,
+                statusCode: err.statusCode
+            });
+        }
     }//Programming or other unknown error: don't leak error details    
     else{
         console.error(err);
-        return res.status(500).render('error',{
-            title: 'Oops! Something went wrong!',
-            msg: 'Please try again later',
-            statusCode: 'Something went wrong!'
-        });
+        if(req.originalUrl.includes('/api')){
+            res.status(500).json({
+                title: 'Oops! Something went wrong!',
+                message: 'Please try again later',
+                statusCode: 'Something went wrong!'
+            });
+        }else{
+            return res.status(500).render('error',{
+                title: 'Oops! Something went wrong!',
+                msg: 'Please try again later',
+                statusCode: 'Something went wrong!'
+            });
+        }
     }
 };
