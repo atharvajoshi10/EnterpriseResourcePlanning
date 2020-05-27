@@ -64,7 +64,7 @@ exports.deleteProcessApi = catchAsync(async(req,res,next) => {
     res.json({status:'success'});
 });
 
-/*##########Image Upload Controllers###########*/
+//########## Image Upload Controllers ###########
 //Function to set destination an filename of thumbnail image
 const multerImgStorage = multer.diskStorage({
     destination: (req,file,cb) =>{
