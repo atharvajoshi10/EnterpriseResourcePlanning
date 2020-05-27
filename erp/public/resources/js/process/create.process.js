@@ -1,64 +1,47 @@
-var host = 'http://localhost:5000';
-const createForm = document.querySelector('.form');
-const add = async (name,pid,description,workerId,machineId,location=undefined) => {
+const createProcessForm = document.getElementById('create-process-form');
+const createProcessApi = async (process_name,process_id,process_description,process_workerId,process_machineId,process_location=undefined) => {
     try{
     const res = await axios({
         method: 'POST',
-        url: `${host}/process/api/add`,
+        url: `${host}/process/api/create`,
         data: {
-            process_name: name,
-            process_id: pid,
-            description: description,
-            worker_id: workerId,
-            machine_id: machineId,
-            process_thumbnail_location:location
+            process_name: process_name,
+            process_id: process_id,
+            description: process_description,
+            worker_id: process_workerId,
+            machine_id: process_machineId,
+            process_thumbnail_location:process_location
         },
     });
     if(res.data.status = 'success'){
-        showAlert('success', 'Process created successfully');
+        $('#create-process-modal').modal('hide');
+        showAlert('success', 'New Process created successfully');
         window.setTimeout(() => {
             window.location.assign('/process');
         }, 1500);
     }
     }catch(err){
-        $('#createProcess').modal('hide');
-        showAlert('danger', err.response.data.message);
+        showAlert('danger', err.response.data.message,true);
     }
 };
 
-const uploadImage = async (data) =>{
-    try{
-        const res = await axios({
-            method: 'POST',
-            url: `${host}/process/api/uploadImage`,
-            data
-        });
-        if(res.data.status = 'success'){
-            return res.data.location;
-        }
-    }catch(err){
-        $('#createProcess').modal('hide');
-        showAlert('danger', err.response.data.message);
-    }
-}
-
-if(createForm){
-    createForm.addEventListener('submit', e =>{
+if(createProcessForm){
+    createProcessForm.addEventListener('submit', e =>{
         e.preventDefault();
-        $('#createProcess').modal('hide');
-        const name = document.getElementById('name').value;
-        const pid = document.getElementById('pid').value;
-        const description = document.getElementById('description').value;
-        const workerId = document.getElementById('workerId').value;
-        const machineId = document.getElementById('machineId').value;
-        const image = document.getElementById('thumbnail');
-        if(image.files.length == 0 ){ 
-            add(name,pid,description,workerId,machineId);
+        const createProcessName = document.getElementById('create-process-name').value;
+        const createProcessId = document.getElementById('create-process-id').value;
+        const createProcessDescription = document.getElementById('create-process-description').value;
+        const createProcessWorkerId = document.getElementById('create-process-workerId').value;
+        const createProcessMachineId = document.getElementById('create-process-machineId').value;
+        const createProcessImage = document.getElementById('create-process-thumbnail');
+        if(createProcessImage.files.length == 0 ){ 
+            createProcessApi(createProcessName,createProcessId,createProcessDescription,createProcessWorkerId,createProcessMachineId);
         } else{
+            const url = 'process/api/uploadImage'
             const form = new FormData();
-            form.append('thumbnail', document.getElementById('thumbnail').files[0])
-            uploadImage(form).then(function(result) {
-                add(name,pid,description,workerId,machineId,result);
+            form.append('thumbnail', createProcessImage.files[0])
+            uploadImageApi(form,url).then(function(result) {
+                createProcessApi(createProcessName,createProcessId,createProcessDescription,createProcessWorkerId,createProcessMachineId,result);
             });
         }   
     });
