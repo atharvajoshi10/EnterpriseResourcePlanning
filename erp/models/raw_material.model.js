@@ -54,12 +54,16 @@ const raw_materialSchema = Schema({
     raw_material_thumbnail_location: {
         type: String,
         default: '/img/raw_material/raw_material.jpg'
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false
     }
 },{
     timestamps: true
-})
+});
 
 
 //Necesarry Export statement, Do not Change
 const Raw_Material = mongoose.model('Raw_Material', raw_materialSchema);
-module.exports = Raw_Material
+module.exports = Raw_Material;

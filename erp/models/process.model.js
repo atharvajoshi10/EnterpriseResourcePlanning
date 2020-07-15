@@ -45,6 +45,10 @@ const processSchema = new Schema({
     process_thumbnail_location: {
         type: String,
         default: '/img/process/process.jpg'
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false
     }
 },{
     timestamps: true

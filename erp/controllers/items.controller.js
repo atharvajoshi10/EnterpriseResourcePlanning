@@ -37,26 +37,26 @@ exports.getItemById = catchAsync(async (req,res,next) =>{
     });
 });
 
-// exports.updateItem = catchAsync(async (req,res,next) =>{
-//     const item = await Item.findById(req.params.id)
-//     if(!item){
-//         return next(new AppError('No Process found with that ID',404));
-//     }
-//     res.render('editItem',{
-//         title: 'Edit Item | ' + item.item_name,
-//         item
-//     });
-// })
-
-// exports.addItem = catchAsync(async (req, res, next) => {
-//     res.render('createItem',{
-//         title: 'Create new Item',
-//         processes,
-//         raw_materials
-//     });
-// });
-
 //API
+exports.calculateDelay = catchAsync(async(req,res,next) =>{
+    let date = new Date()
+    date=date.toJSON();
+    const delay = await Item.aggregate([
+        {
+         $unwind: '$process_list'
+        },
+        {
+            $match: {
+                'process_list.scheduled_date': {$lte: new Date('2020-06-20')}
+            }
+        }
+    ]);
+    console.log(delay);
+    next();
+});
+
+
+
 exports.sortProcessList = catchAsync(async (req,res,next) => {
     const item = await Item.findById(req.params.id).select('process_list');
     const start = req.body.start;
@@ -70,9 +70,14 @@ exports.updateProcessListApi = catchAsync(async (req,res,next) => {
         'process_list.$.scheduled_date': req.body.date,
         'process_list.$.status': req.body.status
     }});
-    console.log(item)
     if(!item){
         return next(new AppError('No Item found with that ID',404));
+    }
+    if(req.body.status == 'completed'){
+        const process = await Process.findOneAndUpdate(
+            {_id:req.body.Id},
+            {$set:{isCompleted:true}
+        });
     }
     res.json({status:'success'});
 });
@@ -89,7 +94,6 @@ exports.updateProcessApi = catchAsync(async (req,res,next) => {
     const item = await Item.updateOne({_id: req.params.id, 'process_list.process': req.body.oldId}, {'$set': {
         'process_list.$.process': req.body.newId
     }});
-    console.log(item)
     if(!item){
         return next(new AppError('No Item found with that ID',404));
     }
@@ -134,6 +138,21 @@ exports.deleteItemApi = catchAsync(async(req,res,next) => {
     }
     res.json({status:'success'});
 });
+
+exports.loadSelectPicker = catchAsync(async(req,res,next) => {
+    const item = await Item.findById(req.params.id).select('process_list','attached_materials');
+    const processList = await Process.find().sort('-createdAt');
+    let processToDelete = item.process_list.map(function(element) {return element.process;});
+    const selectPickerProcessList = processList.filter(function(element) {return processToDelete.indexOf(element._id) === -1;});
+    const materialList = await Raw_material.find().sort('-createdAt');
+    let materialToDelete = item.attached_materials.map(function(element) {return element.material;});
+    const selectPickerMaterialList = materialList.filter(function(element) {return materialToDelete.indexOf(element._id) === -1;});
+    res.json({
+        status:'success',
+        selectPickerProcessList,
+        selectPickerMaterialList
+    })
+})
 
 /*##########PDF Upload Controllers###########*/
 

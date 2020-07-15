@@ -1,0 +1,27 @@
+extends ../base
+
+block content
+    button#create-fp-btn.btn.btn-info.mt-3.mb-5.mr-5.btn-lg.float-right(type='button' ,name='create-fp-btn' ,data-toggle='modal', data-target='#create-fp-modal') Create new Product
+    .container
+        table.table.table-hover.bg-white
+            thead
+            tr.table-primary
+                th(scope='col') Final Product Name 
+                th(scope='col') Final Product Id
+                th(scope='col') Created At
+                th(scope='col').text-center Details
+            tbody
+            each final_product in final_products
+                tr
+                    td
+                        i.fas.fa-box.fa-lg.mr-3   
+                        =final_product.fp_name 
+                    td=final_product.fp_id
+                    td=final_product.createdAt.toLocaleString()
+                    td.text-center
+                        a(href='/final_product/'+final_product._id)
+                            i.fas.fa-share.fa-2x
+    include _createFinalProduct
+
+block scripts
+    script(src="/resources/js/final_product/create.fp.js")

@@ -1,10 +1,12 @@
+//Author - Megh Khaire
+
 //Import Statements to load the models
 let Process = require('../models/process.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const multer = require('multer');
 
-//########## VIEWS CONTROLLERS ##########
+//########## VIEW CONTROLLERS ##########
 
 //Render Process List View 
 exports.getProcesses = catchAsync(async (req,res,next) => {
@@ -65,6 +67,7 @@ exports.deleteProcessApi = catchAsync(async(req,res,next) => {
 });
 
 //########## Image Upload Controllers ###########
+
 //Function to set destination an filename of thumbnail image
 const multerImgStorage = multer.diskStorage({
     destination: (req,file,cb) =>{
@@ -84,7 +87,7 @@ const multerImgFilter = (req,file,cb) => {
         cb(new AppError('Please upload an image!',400), false);
     }
     cb(null, true)
-}
+};
 
 //Function to upload Validated File
 uploadImg = multer({

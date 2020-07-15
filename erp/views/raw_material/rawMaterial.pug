@@ -45,11 +45,11 @@ block content
                             li.list-group-item Raw Material: 4
                             li.list-group-item Raw Material: 5
             .d-inline-flex.float-left.mt-5
-                button(type='button', id='edit-btn' name='edit-btn' ,data-toggle='modal', data-target='#editRawMaterial').btn.btn-outline-primary.mr-3.btn-lg Edit
-                a#delete.btn.btn-outline-danger.mr-3.btn-lg Delete
-                input#id(type='hidden', name='initialPid', value=`${raw_material._id}`)
-    include _editRawMaterial
+                button#update-material-btn(type='button', name='edit-btn' ,data-toggle='modal', data-target='#update-material-modal', onclick=`setUpdateMaterialForm(${JSON.stringify(raw_material)})`).btn.btn-outline-primary.mr-3.btn-lg Update
+                a#delete-material-btn.btn.btn-outline-danger.mr-3.btn-lg Delete
+                input#material-Id(type='hidden', name='material-Id', value=`${raw_material._id}`)
+    include _updateRawMaterial
 
 block scripts
-    script(src='/resources/js/raw_material/edit.raw_material.js')
+    script(src='/resources/js/raw_material/update.raw_material.js')
     script(src='/resources/js/raw_material/delete.raw_material.js')

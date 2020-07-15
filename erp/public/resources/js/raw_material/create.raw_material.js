@@ -1,74 +1,63 @@
-const host = 'http://localhost:5000';
-const createForm = document.querySelector('#create-raw_material');
-$('input[type="checkbox"]').on('change', function() {
-    $('input[type="checkbox"]').not(this).prop('checked', false);
+const createRawMaterialForm = document.getElementById('create-material-form');
+
+let $createCategoryCheckbox = $('#create-material-category input[type="checkbox"]');
+$createCategoryCheckbox.on('change', function() {
+    $createCategoryCheckbox.not(this).prop('checked', false);
 });
-const add = async (name,mid,description,category,quantity,measurement,unit,imgLocation=undefined) => {
+
+const createRawMaterialApi = async (material_name,material_id,material_description,material_category,material_quantity,material_measurement,material_unit,material_imgLocation=undefined) => {
     try{
     const res = await axios({
         method: 'POST',
-        url: `${host}/raw_material/api/add`,
+        url: `${host}/raw_material/api/create`,
         data: {
-            raw_material_name: name,
-            raw_material_id: mid,
-            description: description,
-            category: category,
-            quantity: quantity,
-            measurement: measurement,
-            unit:unit,
-            raw_material_thumbnail_location: imgLocation
+            raw_material_name: material_name,
+            raw_material_id: material_id,
+            description: material_description,
+            category: material_category,
+            quantity: material_quantity,
+            measurement: material_measurement,
+            unit:material_unit,
+            raw_material_thumbnail_location: material_imgLocation
         },
     });
     if(res.data.status = 'success'){
+        $('#create-material-modal').modal('hide');
         showAlert('success', 'New Raw Material created successfully');
         window.setTimeout(() => {
             location.assign('/raw_material')
         }, 1500);
     }
     }catch(err){
-        showAlert('danger', err.response.data.message);
+        showAlert('danger', err.response.data.message, true);
     }
 };
 
-const uploadImage = async (data) =>{
-    try{
-        const res = await axios({
-            method: 'POST',
-            url: `${host}/raw_material/api/uploadImage`,
-            data
-        });
-        if(res.data.status = 'success'){
-            return res.data.location;
-        }
-    }catch(err){
-        showAlert('danger', err.response.data.message); 
-    }
-}
-
-if(createForm){
-    createForm.addEventListener('submit', e =>{
+if(createRawMaterialForm){
+    createRawMaterialForm.addEventListener('submit', e =>{
         e.preventDefault();
-        const name = document.getElementById('name').value;
-        const mid = document.getElementById('mid').value;
-        const description = document.getElementById('description').value;
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        if(checkboxes.length === 0){
-            showAlert('danger', 'Please select a category');
+        const createRawMaterialName = document.getElementById('create-material-name').value;
+        const createRawMaterialId = document.getElementById('create-material-id').value;
+        const createRawMaterialDescription = document.getElementById('create-material-description').value;
+        const CategoryCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        if(CategoryCheckboxes.length === 0){
+            showAlert('danger', 'Please select a category',true);
             return false;
         }
-        const category= $('input[type="checkbox"]:checked').val();
-        const quantity=document.getElementById('quantity').value;
-        const measurement=document.getElementById('measurement').value;
-        const el=document.getElementById('unit')
-        const unit = el.options[el.selectedIndex].text;
-        const image = document.getElementById('thumbnail');
-        if(image.files.length === 0 ){ 
-            add(name,mid,description,category,quantity,measurement,unit);
+        const createRawMaterialCategory= $('input[type="checkbox"]:checked').val();
+        const createRawMaterialQuantity=document.getElementById('create-material-quantity').value;
+        const createRawMaterialMeasurement=document.getElementById('create-material-measurement').value;
+        const el=document.getElementById('create-material-unit')
+        const createRawMaterialUnit = el.options[el.selectedIndex].text;
+        const createRawMaterialImage = document.getElementById('create-material-thumbnail');
+        if(createRawMaterialImage.files.length === 0 ){ 
+            createRawMaterialApi(createRawMaterialName,createRawMaterialId,createRawMaterialDescription,createRawMaterialCategory,createRawMaterialQuantity,createRawMaterialMeasurement,createRawMaterialUnit)
         }else{
+            const url = 'raw_material/api/uploadImage'
             const form = new FormData();
-            form.append('thumbnail', document.getElementById('thumbnail').files[0]);
-            uploadImage(form).then(function(result) {
-                add(name,mid,description,category,quantity,measurement,unit,result);
+            form.append('thumbnail', createRawMaterialImage.files[0]);
+            uploadImageApi(form,url).then(function(result) {
+                createRawMaterialApi(createRawMaterialName,createRawMaterialId,createRawMaterialDescription,createRawMaterialCategory,createRawMaterialQuantity,createRawMaterialMeasurement,createRawMaterialUnit,result)
             }); 
         }
     });

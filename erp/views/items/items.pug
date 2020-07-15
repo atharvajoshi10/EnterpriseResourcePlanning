@@ -82,6 +82,8 @@ html
                                                             span.badge.badge-pill.badge-info Approved
                                                         when "delayed"
                                                             span.badge.badge-pill.badge-warning Delayed
+                                                            |
+                                                            =processes.delay
                                                         when "completed"
                                                             span.badge.badge-pill.badge-success Completed  
         
@@ -147,3 +149,5 @@ html
         script(src='/resources/js/items/pdf.item.js')
         script(src='/resources/js/items/processList.item.js')
         script(src="/resources/js/items/editProcess.item.js")
+        script(src='/resources/js/items/materialList.item.js')
+        script(src="/resources/js/items/editRawMaterial.item.js")

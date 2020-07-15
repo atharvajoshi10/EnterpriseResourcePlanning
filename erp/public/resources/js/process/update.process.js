@@ -16,13 +16,14 @@ const updateProcessApi = async (process_name,process_id,process_description,proc
         },
     });
     if(res.data.status = 'success'){
+        $('#update-process-modal').modal('hide');
         showAlert('success', 'Process updated successfully');
         window.setTimeout(() => {
             location.assign(`/process/${processId}`)
         }, 1500);
     }
     }catch(err){
-        showAlert('danger', err.response.data.message);
+        showAlert('danger', err.response.data.message,true);
     }
 };
 
@@ -41,13 +42,14 @@ const createProcessApi = async (process_name,process_id,process_description,proc
         },
     });
     if(res.data.status = 'success'){
+        $('#update-process-modal').modal('hide');
         showAlert('success', 'New Process created successfully');
         window.setTimeout(() => {
             window.location.assign('/process');
         }, 1500);
     }
     }catch(err){
-        showAlert('danger', err.response.data.message);        
+        showAlert('danger', err.response.data.message,true);        
     }
 };
 
@@ -63,7 +65,7 @@ const updateProcessMiddleware = async (updateType) =>{
     if(updateType === 'saveAsNew-process-submitBtn'){
         const initialProcessId = document.getElementById('update-initial-processId').value;
         if(updateProcessId == initialProcessId){
-            showAlert('danger', 'Assign a new Process Id');
+            showAlert('danger', 'Assign a new Process Id',true);
             return false;
         }
     }
@@ -91,7 +93,6 @@ const updateProcessMiddleware = async (updateType) =>{
 if(updateProcessForm){
     updateProcessForm.addEventListener('submit', e =>{
         e.preventDefault();
-        $('#update-process-modal').modal('hide');
         const updateType = this.document.activeElement.getAttribute("id");
         showConfirm('Are you sure you want to permanently update the selected item?');
         $('#modal-confirm').modal({

@@ -1,0 +1,53 @@
+#create-fp-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='create-fp-modalTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h2#create-fp-modalTitle.modal-title Create Final Product
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                ul.nav.nav-tabs(role="tablist")
+                    li.nav-item
+                        a.nav-link.active(data-toggle='tab', href='#create-fp-detailsTab', role="tab" ,aria-controls="create-fp-detailsTab" ,aria-selected="true") Details
+                    li.nav-item
+                        a.nav-link(data-toggle='tab', href='#create-fp-itemListTab', role="tab", aria-controls="create-fp-itemListTab" aria-selected="false") Items List
+                .tab-content
+                    #create-fp-detailsTab.tab-pane.fade.in.active.show
+                        form.form#create-fp-form
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='create-fp-name') Final Product Name
+                                input#create-fp-name.form-control.form-control-lg(type='name', autocomplete='off', placeholder='Enter Product name', required)
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='create-fp-id') Final Product Id
+                                input#create-fp-id.form-control.form-control-lg(type='text', placeholder='Enter Product Id', required)
+                            .form-group
+                                label.col-form-label.col-form-label-lg(for='create-fp-description') Description
+                                textarea#create-fp-description.form-control.form-control-lg(type='text', placeholder='Product Description', rows="3", required)
+                            .form-group
+                                .custom-file
+                                    label.custom-file-label(for='create-fp-thumbnail') Final Product Thumbnail
+                                    input#create-fp-thumbnail.custom-file-input(type='file', accept='image/*', name='thumbnail' required)
+                            .form-group
+                                .row
+                                    .col-8
+                                        .custom-file
+                                            label.custom-file-label(for='diagram') Product Diagram
+                                            input#create-fp-diagram.custom-file-input(type='file' required)  
+                                    .col-4
+                                        input#create-fp-diagramNumber.form-control(type='text', autocomplete='off', placeholder='Enter Diagram Number' required)
+                                
+
+                    #create-fp-itemListTab.tab-pane.fade
+                        .form-group
+                            label.col-form-label.col-form-label-lg(for='create-fp-itemPicker') Select Associated Items
+                            select.selectpicker.form-control(multiple data-live-search="true")#create-fp-itemPicker
+                                each item in items
+                                    option(value=`${item._id}`)=item.item_name
+                        table.table.table-hover.mt-2.bg-white#create-fp-itemTable
+                            thead
+                            tbody
+            .modal-footer
+                .form-group
+                    .input-group
+                        input.btn.btn-primary.btn-lg(type='submit', name='submit', form='create-fp-form', value='Create Product').mb-2.mr-3#create-fp-submitBtn
+                        input.btn.btn-primary.btn-lg(type='reset', name='reset', form='create-fp-form', value='Reset' onclick='resetForm()').mb-2

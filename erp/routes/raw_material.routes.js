@@ -9,15 +9,13 @@ const auth = require('../middleware/auth')
 
 //Process Api Routes
 router.patch('/api/update/:id',auth, raw_materialController.updateRawMaterialApi);
-router.post('/api/add',auth, raw_materialController.addRawMaterialApi);
+router.post('/api/create',auth, raw_materialController.saveNewRawMaterialApi);
 router.delete('/api/delete/:id',auth, raw_materialController.deleteRawMaterialApi);
 router.post('/api/uploadImage', auth, raw_materialController.uploadImage, raw_materialController.getImageLocation);
 
-//Raw Material Routes
+//Raw Material View Routes
 router.get('/', auth, raw_materialController.getRawMaterials);
-// router.get('/add',auth, raw_materialController.addRawMaterial);
 router.get('/:id',auth, raw_materialController.getRawMaterialById);
-// router.get('/update/:id',auth, raw_materialController.updateRawMaterial);
 
 module.exports = router;
 

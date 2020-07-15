@@ -1,7 +1,6 @@
-var host = 'http://localhost:5000';
 const loginForm = document.querySelector('.form');
 
-const login = async (username,password) => {
+const loginApi = async (username,password) => {
     try{
     const res = await axios({
         method: 'POST',
@@ -17,7 +16,6 @@ const login = async (username,password) => {
             location.assign('/employee/dashboard')
         }, 1500);
     }
-    console.log(res.token);
     }catch(err){
         showAlert('danger', err.response.data.message);
     }
@@ -28,7 +26,7 @@ if(loginForm){
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        login(username,password);
+        loginApi(username,password);
     });
 }
 

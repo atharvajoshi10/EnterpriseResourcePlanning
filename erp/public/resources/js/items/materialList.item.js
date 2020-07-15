@@ -43,10 +43,5 @@ const createMaterialList = () =>{
         });
         attached_materials.push(obj);
     });
-    if(attached_materials.length < 1){
-        return undefined;
-    }else{
-        return attached_materials;
-    }
 }
 

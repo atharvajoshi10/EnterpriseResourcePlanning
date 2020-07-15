@@ -91,6 +91,7 @@ const itemsRouter = require('./routes/items.routes');
 const raw_materialRouter = require('./routes/raw_material.routes');
 const processRouter = require('./routes/process.routes');
 const employeeRouter = require('./routes/employee.routes');
+const final_productRouter = require('./routes/final_product.routes');
 //const adminRouter = require('./routes/admin.routes');
 
 //Making sure app uses the routes
@@ -105,6 +106,7 @@ app.use('/items',itemsRouter);
 app.use('/process',processRouter);
 app.use('/raw_material',raw_materialRouter);
 app.use('/employee',employeeRouter);
+app.use('/final_product',final_productRouter);
 //app.use('/admin/',adminRouter);
 
 //##########Error Handling Routes##########//

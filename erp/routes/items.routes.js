@@ -11,6 +11,7 @@ router.delete('/api/delete/:id',auth, itemsController.deleteItemApi);
 router.post('/api/add',auth,itemsController.addItemApi);
 router.post('/api/uploadImage', auth, itemsController.uploadImage, itemsController.getImageLocation);
 router.patch('/api/update/:id',auth, itemsController.updateItemApi);
+router.get('/api/loadSelectPicker/:id',auth, itemsController.loadSelectPicker);
 //Process-List API
 router.patch('/api/process/sort/:id',auth,itemsController.sortProcessList);
 router.patch('/api/process/append/:id',auth,itemsController.appendProcessApi);
@@ -24,7 +25,7 @@ router.delete('/api/deletePdf/:id',auth, itemsController.deleteDrawingLocation);
 
 //Items Routes
 router.get('/', auth, itemsController.getItems);
-router.get('/:id',auth, itemsController.getItemById);
+router.get('/:id',auth,itemsController.calculateDelay, itemsController.getItemById);
 
 
 module.exports = router;

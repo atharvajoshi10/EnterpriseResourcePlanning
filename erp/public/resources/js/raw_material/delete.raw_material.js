@@ -1,11 +1,8 @@
-var host = 'http://localhost:5000';
-const id = document.getElementById('id').value;
-
-const deleteRawMaterial = async (id) => {
+const deleteRawMaterialApi = async (rawMaterialId) => {
     try{
         const res = await axios({
             method: 'DELETE',
-            url: `${host}/raw_material/api/delete/${id}`
+            url: `${host}/raw_material/api/delete/${rawMaterialId}`
         });
         if(res.data.status = 'success'){
             showAlert('success', 'Raw Material deleted successfully');
@@ -19,7 +16,7 @@ const deleteRawMaterial = async (id) => {
 };
 
 $(document).ready(function(){
-    $("#delete").click(function(e){
+    $("#delete-material-btn").click(function(e){
         e.preventDefault();
         showConfirm('Are you sure you want to permanently delete the selected item?');
         $('#modal-confirm').modal({
@@ -28,7 +25,8 @@ $(document).ready(function(){
         })
         .on('click', '#confirm', function(e) {
             $('#modal-confirm').modal('hide');
-            deleteRawMaterial(id);
+            const rawMaterialId = document.getElementById('material-Id').value;
+            deleteRawMaterialApi(rawMaterialId);
         });
     });
 });

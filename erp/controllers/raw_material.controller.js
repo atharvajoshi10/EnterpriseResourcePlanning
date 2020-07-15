@@ -1,9 +1,14 @@
+//Author - Megh Khaire
+
 //Import Statements to load the models
 let Raw_material = require('../models/raw_material.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const multer = require('multer');
 
+//########## VIEW CONTROLLERS ##########
+
+//Render Material List View 
 exports.getRawMaterials = catchAsync(async (req,res,next) => {
     const raw_materials = await Raw_material.find().sort('-createdAt');
     res.render('rawMaterialList',{
@@ -12,6 +17,7 @@ exports.getRawMaterials = catchAsync(async (req,res,next) => {
     });
 });
 
+//Render Selected Material
 exports.getRawMaterialById = catchAsync(async (req,res,next) =>{
     const raw_material = await Raw_material.findById(req.params.id)
     if(!raw_material){
@@ -23,43 +29,23 @@ exports.getRawMaterialById = catchAsync(async (req,res,next) =>{
     });
 });
 
-// exports.updateRawMaterial = catchAsync(async (req,res,next) =>{
-//     const raw_material = await Raw_material.findById(req.params.id)
-//     if(!raw_material){
-//         return next(new AppError('No Raw Material found with that ID',404));
-//     }
-//     res.render('editRawMaterial',{
-//         title: 'Edit Raw Material | ' + raw_material.raw_material_name,
-//         raw_material
-//     });
-// })
+//########## API CONTROLLERS #########
 
-// exports.addRawMaterial = catchAsync(async (req, res, next) => {
-//     res.render('createRawMaterial',{
-//         title: 'Create new Raw_material'
-//     });
-// });
-
-//##########API#########
+//Api to update selected Material
 exports.updateRawMaterialApi = catchAsync(async (req,res,next) =>{
     const raw_material = await Raw_material.findById(req.params.id);
     if(!raw_material){
         return next(new AppError('No Raw Material found with that ID',404));
     }
-    raw_material.raw_material_name = req.body.raw_material_name;
-    raw_material.raw_material_id = req.body.raw_material_id;
-    raw_material.description = req.body.description;
-    raw_material.category = req.body.category;
-    raw_material.quantity = req.body.quantity;
-    raw_material.measurement = req.body.measurement;
-    raw_material.unit = req.body.unit;
-    raw_material.raw_material_thumbnail_location = req.body.raw_material_thumbnail_location;
+    const updates = Object.keys(req.body)
+    updates.forEach((update) => raw_material[update] = req.body[update])
     raw_material.username_updated=req.employee.e_username;
     await raw_material.save()
     res.json({status:'success'});
 });
 
-exports.addRawMaterialApi = catchAsync(async (req,res,next) =>{
+//Api to save new Raw Material
+exports.saveNewRawMaterialApi = catchAsync(async (req,res,next) =>{
     const newRawMaterial = new Raw_material({
         ...req.body,
         username_created: req.employee.e_username
@@ -68,6 +54,7 @@ exports.addRawMaterialApi = catchAsync(async (req,res,next) =>{
     res.json({status:'success'});
 });
 
+//Api to delete selected Raw Material
 exports.deleteRawMaterialApi = catchAsync(async(req,res,next) => {
     const raw_material = await Raw_material.findByIdAndDelete(req.params.id)
     if(!raw_material){
@@ -77,17 +64,21 @@ exports.deleteRawMaterialApi = catchAsync(async(req,res,next) => {
 });
 
 
-/*##########Image Upload Controllers###########*/
+//########## Image Upload Controllers ###########
 
+//Function to set destination an filename of thumbnail image
 const multerImgStorage = multer.diskStorage({
     destination: (req,file,cb) =>{
         cb(null,'public/img/raw_material');
     },
     filename: (req,file,cb) => {
-        cb(null,file.originalname);
+        const ext = file.mimetype.split('/')[1];
+        const filename=file.originalname.split('.')[0];
+        cb(null,`thumbnail-${filename}-${Date.now()}.${ext}`);
     }
 });
 
+//Function to filter uploaded file (Validation Check)
 const multerImgFilter = (req,file,cb) => {
     //Image FILES FILTERING
     if(!file.mimetype.startsWith('image')){
@@ -96,6 +87,7 @@ const multerImgFilter = (req,file,cb) => {
     cb(null, true)
 }
 
+//Function to upload Validated File
 uploadImg = multer({
     storage: multerImgStorage,
     limits: {
@@ -104,9 +96,12 @@ uploadImg = multer({
     fileFilter: multerImgFilter
 });
 
+//Api to upload image on local storage
 exports.uploadImage = uploadImg.single('thumbnail');
+
+//Api to get Location of uploaded image
 exports.getImageLocation = catchAsync(async (req,res,next) =>{
-    const location = '/img/raw_material/'+req.file.originalname;
+    const location = `/img/raw_material/${req.file.filename}`;
     res.json({
         status:'success',
         location: location

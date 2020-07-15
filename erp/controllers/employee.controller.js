@@ -1,20 +1,37 @@
+//Author - Megh Khaire
+
 const Employee = require('../models/employee.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-//API Controllers
-//Function to signup new employees
-exports.signupApi = catchAsync(async(req,res,next) => {
-    const newEmployee = Employee.create(req.body)
-    res.status(201).json({
-        status: 'success',
-        data: {
-            employee: newEmployee
-        }
+//########## VIEW CONTROLLERS ##########
+
+//Render Login View
+exports.login = catchAsync(async (req, res, next) => {
+    res.render('login',{
+        title: 'Login'
     });
 });
 
-//Function to login existing employees
+//Render Dashboard View
+exports.dashboard = catchAsync(async (req, res, next) => {
+    res.render('dashboard',{
+        title: 'Dashboard'
+    });
+});
+
+//########## API CONTROLLERS ##########
+
+//Api to signup new employees
+exports.signupApi = catchAsync(async(req,res,next) => {
+    const newEmployee = Employee.create(req.body);
+    await newEmployee.save()
+    res.status(201).json({
+        status: 'success'
+    });
+});
+
+//Api to login existing employees
 exports.loginApi = catchAsync(async (req, res, next) =>{
     if(!req.body.e_password||!req.body.e_password){
         return next(new AppError('Please enter email and password', 400));
@@ -36,7 +53,7 @@ exports.loginApi = catchAsync(async (req, res, next) =>{
     res.json({status: 'success', employee, token});
 });
 
-//Function to logout existing employees from all devices
+//Api to logout existing employees from all devices
 exports.logoutApi = async (req,res,next) =>{
     res.cookie('jwt','LoggedOut',{
         expires: new Date(Date.now() + 1*1000),
@@ -45,36 +62,27 @@ exports.logoutApi = async (req,res,next) =>{
     res.status(200).json({status:'success'});
 };
 
-//Function to get profile info
+//Api to get profile info
 exports.profileApi = catchAsync(async (req,res,next) =>{
-    res.json(req.employee)
+    const employee = await Employee.findById(req.params.id);
+    res.json({
+        status: 'success',
+        employee,
+    });
 });
 
-//Function to update profile
+//Api to update profile
 exports.updateMeApi = catchAsync(async (req,res,next) =>{
     const updates = Object.keys(req.body)
-    updates.forEach((update) => req.employee[update] = req.body[update])
+    updates.forEach((update) => req.employee[update] = req.body[update]);
     await req.employee.save()
     res.send('Employee Updated\n'+req.employee)  
 });
 
-//Function to delete profile
+//Api to delete profile
 exports.deleteMeApi = catchAsync(async (req,res,next) => {
-    await Employee.findByIdAndDelete(req.employee._id)
+    const employee = await Employee.findByIdAndDelete(req.employee._id);
+    if(!employee){
+        return next(new AppError('No Employee found with that ID',404));
+    }
 });
-
-//View Controllers
-//Login
-exports.login = catchAsync(async (req, res, next) => {
-    res.render('login',{
-        title: 'Login'
-    });
-});
-
-//Dashboard
-exports.dashboard = catchAsync(async (req, res, next) => {
-    res.render('dashboard',{
-        title: 'Dashboard'
-    });
-});
-

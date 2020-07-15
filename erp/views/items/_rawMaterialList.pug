@@ -48,11 +48,11 @@
                                 
                     #add-materialList.tab-pane.fade
                         .form-group
-                            label.col-form-label.col-form-label-lg(for='materialPicker') Select Associated Raw Materials
-                            select.selectpicker.form-control(multiple data-live-search="true")#materialPicker
-                                each material in materialList
-                                    option(value=`${material._id}`)=material.raw_material_name
-                        table.table.table-hover.mt-2.bg-white#material-table
+                            label.col-form-label.col-form-label-lg(for='rawMaterialPicker') Select Associated Raw Materials
+                            select.selectpicker.form-control(multiple data-live-search="true")#rawMaterialPicker
+                                //- each material in materialList
+                                //-     option(value=`${material._id}`)=material.raw_material_name
+                        table.table.table-hover.mt-2.bg-white#raw_material-table
                             thead
                             tbody
                         input.btn.btn-primary.btn-lg#list-material.mt-3(type='button', value='Done' onclick ='')

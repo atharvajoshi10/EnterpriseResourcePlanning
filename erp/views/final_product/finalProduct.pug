@@ -1,0 +1,95 @@
+extends ../base
+
+block content
+    button.btn.btn-info.m-3.btn-lg(type='button', onclick='window.history.back();') Back
+    .container.mt-3
+        
+        .jumbotron.h-100.w-100.pt-5
+            .row.mb-5.mr-0.ml-0.w-100
+                .col-sm-6
+                    h1.display-5=final_product.fp_name
+                    p.lead=final_product.description
+                .col-sm-6
+                    .card.float-right(style='width: 10rem;height:10rem')
+                        img.card-img(src=`${final_product.fp_thumbnail_location}`, alt='Final Product image',style='width: 10rem;height:10rem')
+                
+            .row.mb-5
+                .col-sm-6.mb-2
+                    .card.mb-3.border-info.h-100
+                        .card-body
+                            h4.card-title.mb-2.text-muted Details
+                            ul.list-group.list-group-flush
+                            li.list-group-item Final Product Id:  
+                                =final_product.fp_id   
+                            li.list-group-item Username Created: 
+                                =final_product.username_created
+                            if final_product.username_updated
+                                li.list-group-item Username Updated: 
+                                    =final_product.username_updated
+                .col-sm-6.mb-2
+                    .card.mb-3.border-info.h-100
+                        .card-body
+                            h4.card-title.mb-2.text-muted Recents
+                            ul.list-group.list-group-flush
+                            li.list-group-item  Order: 1
+                            li.list-group-item  Order: 2
+                            li.list-group-item  Order: 3
+                            li.list-group-item  Order: 4
+                            li.list-group-item  Order: 5
+            .row.mb-5
+                .col-sm-6.mb-2
+                    .card.mb-3.border-info.h-100
+                        .card-body
+                            .d-inline-flex.mb-2.w-100.justify-content-between
+                                h4.card-title.mb-2.text-muted Item List
+                                button.btn.btn-info(type='button', name='update-fp-itemList' ,data-toggle='modal', data-target='#update-fp-itemListModal') Update
+                            table.table.table-hover.mt-2.bg-white
+                                    thead
+                                    tr.table-info
+                                        th(scope='col') Item Name 
+                                        th(scope='col') Scheduled Date
+                                        th(scope='col') Status
+                                    tbody
+                                        each items in final_product.items_list
+                                            tr
+                                                td
+                                                    a.mr-5(href='/items/'+items.item._id)=items.item.item_name
+                                                td
+                                                    span.mr-5=items.scheduled_date.toDateString()
+                                                td
+                                                    case `${items.status}`
+                                                        when "approved"
+                                                            span.badge.badge-pill.badge-info Approved
+                                                        when "delayed"
+                                                            span.badge.badge-pill.badge-warning Delayed
+                                                        when "completed"
+                                                            span.badge.badge-pill.badge-success Completed  
+                .col-sm-6
+                        .card
+                            .card-body
+                                .d-inline-flex.mb-2.w-100.justify-content-between
+                                    h4.card-title.mb-2.text-muted Diagram
+                                    button#update-fp-pdfList.btn.btn-info(type='button', name='update-fp-pdfList' ,data-toggle='modal', data-target='#update-fp-pdfListModal') Update
+                                table.table.table-hover.mt-3.bg-white
+                                    thead
+                                    tr.table-info
+                                        th(scope='col') Diagram Number
+                                        th(scope='col') Revision Number
+                                        th(scope='col') Diagram pdf
+                                    tbody
+                                        each diagram in final_product.assembly_diagram_list
+                                            tr
+                                                td=diagram.diagram_number 
+                                                td=diagram.diagram_revision_number
+                                                td.text-center
+                                                    a(href=`${diagram.diagram_location}`, target='_blank')
+                                                        img(src='/resources/img/pdf.svg', alt='View PDF',style='width: 1.5rem;height:1.5rem')  
+            .d-inline-flex.float-left
+                button#update-fp-btn(type='button', name='edit-btn' ,data-toggle='modal', data-target='#update-fp-modal', onclick=`setUpdateFinalProductForm(${JSON.stringify(final_product)})`).btn.btn-outline-primary.mr-3.btn-lg Update
+                button#delete-fp-btn.btn.btn-outline-danger.mr-3.btn-lg Delete
+                input#final_product-Id(type='hidden', name='final_product-Id', value=`${final_product._id}`)
+    include _updateFinalProduct    
+            
+block scripts
+    script(src='/resources/js/final_product/update.fp.js')
+    script(src='/resources/js/final_product/delete.fp.js')

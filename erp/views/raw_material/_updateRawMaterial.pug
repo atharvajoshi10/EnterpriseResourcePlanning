@@ -1,0 +1,53 @@
+#update-material-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='update-material-modalTitle', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h2#update-material-modalTitle.modal-title Edit Raw Material 
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+                form.form#update-material-form
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-name') Material Name
+                        input#update-material-name.form-control.form-control-lg(type='name', autocomplete='off', placeholder='Enter Material name', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-id') Material Id
+                        input#update-material-id.form-control.form-control-lg(type='text', placeholder='Enter Material Id', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-description') Description
+                        textarea#update-material-description.form-control.form-control-lg(type='text', placeholder='Material Description', rows="3", required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-category') Category
+                        #update-material-category
+                            .form-check.form-check-inline
+                                input#update-material-category1.form-check-input(type='checkbox', name='category1', value='Raw')
+                                label.form-check-label(for='update-material-category1') Raw
+                            .form-check.form-check-inline
+                                input#update-material-category2.form-check-input(type='checkbox', name='category2', value='Consumable')
+                                label.form-check-label(for='update-material-category2') Consumable
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-quantity') Quantity
+                        input#update-material-quantity.form-control.form-control-lg(type='number', placeholder='Enter Quantity' , required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-measurement') Measurement
+                        input#update-material-measurement.form-control.form-control-lg(type='text', placeholder='Enter Measurement', required)
+                    .form-group
+                        label.col-form-label.col-form-label-lg(for='update-material-unit') Unit
+                        select#update-material-unit.form-control.form-control-lg
+                            option(value='Weight').update-material-unitOption Weight
+                            option(value='Metrics').update-material-unitOption Metrics
+                            option(value='Volume').update-material-unitOption Volume
+                            option(value='Quantity').update-material-unitOption Quantity
+                    .form-group
+                        input#update-initial-materialId(type='hidden', name='update-initial-materialId')
+                        input#update-material-defaultImgLoc(type='hidden',name='update-material-defaultImgLoc')
+                        input#update-materialId(type='hidden', name='update-materialId')
+                    .form-group
+                        label(for='update-material-thumbnail') New Raw Material Thumbnail Image
+                        input#update-material-thumbnail.form-control-file(type='file', accept='image/*', name='thumbnail')
+            .modal-footer
+                .form-group
+                    .input-group
+                        input.btn.btn-primary.btn-lg(type='submit', name='submit',form='update-material-form', value='Update Raw Material ').mb-2.mr-3#update-material-submitBtn
+                        input.btn.btn-primary.btn-lg(type='submit', name='submit',form='update-material-form',  value='Save as new Raw Material').mb-2.mr-3#saveAsNew-material-submitBtn
+                        input.btn.btn-primary.btn-lg(type='reset', name='reset',form='update-material-form',  value='Reset').mb-2

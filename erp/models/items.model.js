@@ -53,9 +53,8 @@ const itemSchema = new Schema({
         scheduled_date: Date,
         status: {
             type:String,
-            default: 'Approved'
+            default: 'approved'
         }
-        //instructions: String
     }],
     attached_materials: [{
         material : {
@@ -75,12 +74,16 @@ const itemSchema = new Schema({
     item_thumbnail_location: {
         type: String,
         default: '/img/items/item.jpg'
+    },
+    isCompleted:{
+        type: Boolean,
+        default: false
     }
 },{
     timestamps:true,
 })
 
-
 //Necesarry Export statement, Do not Change
 const Item = mongoose.model('Item', itemSchema);
 module.exports = Item;
+

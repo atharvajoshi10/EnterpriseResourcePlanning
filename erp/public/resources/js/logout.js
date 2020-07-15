@@ -1,6 +1,4 @@
-var host = 'http://localhost:5000';
-
-const logout = async() => {
+const logoutApi = async() => {
     try{
         const res = await axios({
             method: 'GET',
@@ -15,5 +13,5 @@ const logout = async() => {
 };
 
 $(document).ready(function(){
-    $("#logoutBtn").click(logout);
+    $("#logoutBtn").click(logoutApi);
 });

@@ -4,10 +4,6 @@
 //fp_name : Name of final product
 //description : Description of product
 //items : List of items for the product
-//          item_id : objid of the item
-//          process_list_overide : If false use the default process list of the item
-//                                 if true use the custom list present in the final product
-//                                 any change  in the process list will change this variable to true
 //username_created : Record user who created the process
 //username_updated : Record user who updated the process
 //timestamps : record time of creation and updation
@@ -29,18 +25,28 @@ const final_productSchema = new Schema({
         required: [true, 'Final Product ID must be specified!']
     },
     description: String,
-    items : [{
-        item_id : {
+    items_list : [{
+        item: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Item'
+        },
+        status : {
             type: String,
-            trim:true,
-            required: true
+            default: 'approved'
+        }
+    }],
+    assembly_diagram_list: [{
+        diagram_location: {
+            type:String,
         },
-        process_list_overide: {
-            type: Boolean,
-            required: true
+        diagram_number:{
+            type: String,
+            trim:true
         },
-        status : String,
-        process_list : [String]
+        diagram_revision_number:{
+            type:Number,
+            default:0
+        }
     }],
     username_created :{
         type: String,
@@ -49,6 +55,10 @@ const final_productSchema = new Schema({
     username_updated: {
         type: String,
         ref: 'Employee'
+    },
+    fp_thumbnail_location: {
+        type: String,
+        default: '/img/fp/fp.jpg'
     }
 },{
     timestamps: true
