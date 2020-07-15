@@ -25,7 +25,7 @@ router.delete('/api/deletePdf/:id',auth, itemsController.deleteDrawingLocation);
 
 //Items Routes
 router.get('/', auth, itemsController.getItems);
-router.get('/:id',auth,itemsController.calculateDelay, itemsController.getItemById);
+router.get('/:id',auth,itemsController.getItemById);
 
 
 module.exports = router;
